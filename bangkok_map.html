@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_b96070671abb5bf9b51ca12463970232 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position:fixed;bottom:20px;left:20px;z-index:1000;background:white;
+        padding:14px 18px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.15);
+        font-family:system-ui,sans-serif;font-size:13px;max-width:280px;">
+        <b style="font-size:15px;">Bangkok 4-Day Route</b>
+        <ul style="list-style:none;padding:0;margin:8px 0 0;"><li style="margin:3px 0"><span style="background:#e74c3c;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Day 1: Old Town + Riverside</li><li style="margin:3px 0"><span style="background:#3498db;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Day 2: Chinatown → Thong Lor</li><li style="margin:3px 0"><span style="background:#2ecc71;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Day 3: Markets + Siam + Park</li><li style="margin:3px 0"><span style="background:#9b59b6;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Day 4: Cafes + Silom + Massage</li><li style="margin:3px 0"><span style="background:#95a5a6;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Extras / Anytime</li></ul>
+        <div style="margin-top:8px;font-size:11px;color:#888;line-height:1.4;">
+            Click markers for details. Toggle days via layer control.
+        </div>
+    </div>
+    
+            <div class="folium-map" id="map_b96070671abb5bf9b51ca12463970232" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_b96070671abb5bf9b51ca12463970232 = L.map(
+                "map_b96070671abb5bf9b51ca12463970232",
+                {
+                    center: [13.738, 100.525],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 13,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_bf7982c9f032ac6789a99ceac870618d = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_bf7982c9f032ac6789a99ceac870618d.addTo(map_b96070671abb5bf9b51ca12463970232);
+        
+    
+            var feature_group_1ed609f75c3a66cab1a4c0052a2d4868 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_bdafa04d3efedc7cb14c5a43c7d00deb = L.marker(
+                [13.7407, 100.5087],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_ed2c746ed461bc5c90ba29973cdaa19b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "cutlery",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_59526b5975856e131a11b2a84d41c057 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_b14110525496bfa24111e9d2a1986795 = $(`<div id="html_b14110525496bfa24111e9d2a1986795" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Yaowarat / Chinatown</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Evening option Day 1. MRT Wat Mangkon. Polarizing!</div></div></div>`)[0];
+                popup_59526b5975856e131a11b2a84d41c057.setContent(html_b14110525496bfa24111e9d2a1986795);
+            
+        
+
+        marker_bdafa04d3efedc7cb14c5a43c7d00deb.bindPopup(popup_59526b5975856e131a11b2a84d41c057)
+        ;
+
+        
+    
+    
+            marker_bdafa04d3efedc7cb14c5a43c7d00deb.bindTooltip(
+                `<div>
+                     Yaowarat / Chinatown ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_bdafa04d3efedc7cb14c5a43c7d00deb.setIcon(icon_ed2c746ed461bc5c90ba29973cdaa19b);
+            
+    
+            var marker_e8fe6d6fe4d1bca26f83be2d99f0ee5a = L.marker(
+                [13.74, 100.55],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_276a1292e68a0c447c74eb43f2c6b224 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "glass",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_592089201597d30e0d2db3f47b9a0b80 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_5766b220d9c972c1c37fe52ed3c2c09e = $(`<div id="html_5766b220d9c972c1c37fe52ed3c2c09e" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Ksana Matcha</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Day 4 option | Calm, grounding matcha cafe</div></div></div>`)[0];
+                popup_592089201597d30e0d2db3f47b9a0b80.setContent(html_5766b220d9c972c1c37fe52ed3c2c09e);
+            
+        
+
+        marker_e8fe6d6fe4d1bca26f83be2d99f0ee5a.bindPopup(popup_592089201597d30e0d2db3f47b9a0b80)
+        ;
+
+        
+    
+    
+            marker_e8fe6d6fe4d1bca26f83be2d99f0ee5a.bindTooltip(
+                `<div>
+                     Ksana Matcha ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e8fe6d6fe4d1bca26f83be2d99f0ee5a.setIcon(icon_276a1292e68a0c447c74eb43f2c6b224);
+            
+    
+            var marker_562a1d964786bb12713118a6a0ae0706 = L.marker(
+                [13.7345, 100.5095],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_d6f2e72feb5d88fc6d9102794be3f000 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "glass",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7e4c6c800bf711ec03d906c1284f0c3d = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_4bd14243d04b29e730db26e12fa53b8f = $(`<div id="html_4bd14243d04b29e730db26e12fa53b8f" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Mother Roaster</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">In Talat Noi | Bike repair 1F, specialty coffee 2F</div></div></div>`)[0];
+                popup_7e4c6c800bf711ec03d906c1284f0c3d.setContent(html_4bd14243d04b29e730db26e12fa53b8f);
+            
+        
+
+        marker_562a1d964786bb12713118a6a0ae0706.bindPopup(popup_7e4c6c800bf711ec03d906c1284f0c3d)
+        ;
+
+        
+    
+    
+            marker_562a1d964786bb12713118a6a0ae0706.bindTooltip(
+                `<div>
+                     Mother Roaster ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_562a1d964786bb12713118a6a0ae0706.setIcon(icon_d6f2e72feb5d88fc6d9102794be3f000);
+            
+    
+            var marker_10ed63fdf37291f737945e6777cc3653 = L.marker(
+                [13.738, 100.512],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_2c5d0905aeb6224cf3ef8ab86a2f15e3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "cutlery",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6fc520effbd1988104b21480143ac284 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_496b92ef4821d6db69ec4daa6c281f4c = $(`<div id="html_496b92ef4821d6db69ec4daa6c281f4c" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Hidden Bangkok Bistro</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Near Wat Traimit | Food OK, go for Golden Buddha view</div></div></div>`)[0];
+                popup_6fc520effbd1988104b21480143ac284.setContent(html_496b92ef4821d6db69ec4daa6c281f4c);
+            
+        
+
+        marker_10ed63fdf37291f737945e6777cc3653.bindPopup(popup_6fc520effbd1988104b21480143ac284)
+        ;
+
+        
+    
+    
+            marker_10ed63fdf37291f737945e6777cc3653.bindTooltip(
+                `<div>
+                     Hidden Bangkok Bistro ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_10ed63fdf37291f737945e6777cc3653.setIcon(icon_2c5d0905aeb6224cf3ef8ab86a2f15e3);
+            
+    
+            var marker_6d3326ca329214fe77e3aec8e66a3d67 = L.marker(
+                [13.724, 100.529],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_a051abc9c9ce6f5d1d52b4637a6712b9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "cloud",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0039b69505876576ecf120d6eb86891e = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_03c7b6d0fc42c037f0818fb9a36e822f = $(`<div id="html_03c7b6d0fc42c037f0818fb9a36e822f" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Arabica 58F</h4>         <div style="margin-bottom:4px;font-size:14px;">★★☆☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Coffee is BAD. Get ice cream instead</div></div></div>`)[0];
+                popup_0039b69505876576ecf120d6eb86891e.setContent(html_03c7b6d0fc42c037f0818fb9a36e822f);
+            
+        
+
+        marker_6d3326ca329214fe77e3aec8e66a3d67.bindPopup(popup_0039b69505876576ecf120d6eb86891e)
+        ;
+
+        
+    
+    
+            marker_6d3326ca329214fe77e3aec8e66a3d67.bindTooltip(
+                `<div>
+                     Arabica 58F ★★☆☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6d3326ca329214fe77e3aec8e66a3d67.setIcon(icon_a051abc9c9ce6f5d1d52b4637a6712b9);
+            
+    
+            var marker_5e37e01de6b622444c846b1aef7eb99b = L.marker(
+                [13.726, 100.532],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_bf3e438d5cf175347a59adc37b78200c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "cloud",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ac0a32cfb5d12c8f3ffedbec4467bf6b = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_da3bffbfcd87522115cf9c3b996ec67e = $(`<div id="html_da3bffbfcd87522115cf9c3b996ec67e" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Unculture Silom Rooftop</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Silom area rooftop bar</div></div></div>`)[0];
+                popup_ac0a32cfb5d12c8f3ffedbec4467bf6b.setContent(html_da3bffbfcd87522115cf9c3b996ec67e);
+            
+        
+
+        marker_5e37e01de6b622444c846b1aef7eb99b.bindPopup(popup_ac0a32cfb5d12c8f3ffedbec4467bf6b)
+        ;
+
+        
+    
+    
+            marker_5e37e01de6b622444c846b1aef7eb99b.bindTooltip(
+                `<div>
+                     Unculture Silom Rooftop ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5e37e01de6b622444c846b1aef7eb99b.setIcon(icon_bf3e438d5cf175347a59adc37b78200c);
+            
+    
+            var marker_d782e1aea07ef8ab3e690a82a4a2ced3 = L.marker(
+                [13.733, 100.553],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_f3c73f9bb49a16cb0e68155d8ae30f77 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "music",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_289120d5d8d9948afe25aaf22bb35d8c = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_4b3f829acd1faa4116ebc42ab84b558e = $(`<div id="html_4b3f829acd1faa4116ebc42ab84b558e" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Drag Show @ Stranger</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Day 4 evening option. Lecya: 'was in awe'</div></div></div>`)[0];
+                popup_289120d5d8d9948afe25aaf22bb35d8c.setContent(html_4b3f829acd1faa4116ebc42ab84b558e);
+            
+        
+
+        marker_d782e1aea07ef8ab3e690a82a4a2ced3.bindPopup(popup_289120d5d8d9948afe25aaf22bb35d8c)
+        ;
+
+        
+    
+    
+            marker_d782e1aea07ef8ab3e690a82a4a2ced3.bindTooltip(
+                `<div>
+                     Drag Show @ Stranger ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d782e1aea07ef8ab3e690a82a4a2ced3.setIcon(icon_f3c73f9bb49a16cb0e68155d8ae30f77);
+            
+    
+            var marker_4a5a8554eb09b33215a7c45c852098d5 = L.marker(
+                [13.7395, 100.558],
+                {
+}
+            ).addTo(feature_group_1ed609f75c3a66cab1a4c0052a2d4868);
+        
+    
+            var icon_5692886b97a412fbb708c765cda0b4f7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "gray",
+  "iconColor": "white",
+  "icon": "music",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2dad64a0eeda1f55f2d97dedd8e66139 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_d06311975505c32f397b8c26e594e874 = $(`<div id="html_d06311975505c32f397b8c26e594e874" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#95a5a6;">Soi Cowboy</h4>         <div style="margin-bottom:4px;font-size:14px;">★★☆☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Extras / Anytime | Flexible</div>         <div style="font-size:13px;line-height:1.4;">Niche. 'To feel Thailand'</div></div></div>`)[0];
+                popup_2dad64a0eeda1f55f2d97dedd8e66139.setContent(html_d06311975505c32f397b8c26e594e874);
+            
+        
+
+        marker_4a5a8554eb09b33215a7c45c852098d5.bindPopup(popup_2dad64a0eeda1f55f2d97dedd8e66139)
+        ;
+
+        
+    
+    
+            marker_4a5a8554eb09b33215a7c45c852098d5.bindTooltip(
+                `<div>
+                     Soi Cowboy ★★☆☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4a5a8554eb09b33215a7c45c852098d5.setIcon(icon_5692886b97a412fbb708c765cda0b4f7);
+            
+    
+            var feature_group_56a3d2d1e7d5366f1906ddc374222355 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_1a7780193b9005b04c2aab330260c02f = L.marker(
+                [13.751, 100.4927],
+                {
+}
+            ).addTo(feature_group_56a3d2d1e7d5366f1906ddc374222355);
+        
+    
+            var icon_250ff8ac9cbd129adc2208c6d850cf13 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tower",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7a2c7dcdf259e1ed78fc823e4e54e606 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_583f7c7dc9dd9f2ec5c716c01b485830 = $(`<div id="html_583f7c7dc9dd9f2ec5c716c01b485830" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#e74c3c;">Grand Palace + Wat Phra Kaew</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 1: Old Town + Riverside | Stop #1</div>         <div style="font-size:13px;line-height:1.4;">08:30-11:00 | ฿500 | #1 sight</div></div></div>`)[0];
+                popup_7a2c7dcdf259e1ed78fc823e4e54e606.setContent(html_583f7c7dc9dd9f2ec5c716c01b485830);
+            
+        
+
+        marker_1a7780193b9005b04c2aab330260c02f.bindPopup(popup_7a2c7dcdf259e1ed78fc823e4e54e606)
+        ;
+
+        
+    
+    
+            marker_1a7780193b9005b04c2aab330260c02f.bindTooltip(
+                `<div>
+                     Grand Palace + Wat Phra Kaew ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1a7780193b9005b04c2aab330260c02f.setIcon(icon_250ff8ac9cbd129adc2208c6d850cf13);
+            
+    
+            var marker_db993bd6414e66a3a797621f24c16ac5 = L.marker(
+                [13.7463, 100.4928],
+                {
+}
+            ).addTo(feature_group_56a3d2d1e7d5366f1906ddc374222355);
+        
+    
+            var icon_130e08f2bc8d2fd78a0d5d164c23f1a2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tower",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2cdf579207505d17cd054b49bb56180e = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_1b2d63af433673f02166a84e6b00df96 = $(`<div id="html_1b2d63af433673f02166a84e6b00df96" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#e74c3c;">Wat Pho + Thai Massage</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 1: Old Town + Riverside | Stop #2</div>         <div style="font-size:13px;line-height:1.4;">11:00-13:00 | ฿300 | Reclining Buddha + massage ฿260/30min</div></div></div>`)[0];
+                popup_2cdf579207505d17cd054b49bb56180e.setContent(html_1b2d63af433673f02166a84e6b00df96);
+            
+        
+
+        marker_db993bd6414e66a3a797621f24c16ac5.bindPopup(popup_2cdf579207505d17cd054b49bb56180e)
+        ;
+
+        
+    
+    
+            marker_db993bd6414e66a3a797621f24c16ac5.bindTooltip(
+                `<div>
+                     Wat Pho + Thai Massage ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_db993bd6414e66a3a797621f24c16ac5.setIcon(icon_130e08f2bc8d2fd78a0d5d164c23f1a2);
+            
+    
+            var marker_f48b304792fa8cd726dcadd3d7455a1d = L.marker(
+                [13.7437, 100.4888],
+                {
+}
+            ).addTo(feature_group_56a3d2d1e7d5366f1906ddc374222355);
+        
+    
+            var icon_946a565ff213f333ffb5a37563032251 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tower",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_96427006d46b1cddf0845023a651edb2 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_bb160aa06ef3d494c8617bde7ff39ea2 = $(`<div id="html_bb160aa06ef3d494c8617bde7ff39ea2" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#e74c3c;">Wat Arun</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 1: Old Town + Riverside | Stop #3</div>         <div style="font-size:13px;line-height:1.4;">13:30-14:00 | ฿100 | Quick visit. Both on west bank → boat south</div></div></div>`)[0];
+                popup_96427006d46b1cddf0845023a651edb2.setContent(html_bb160aa06ef3d494c8617bde7ff39ea2);
+            
+        
+
+        marker_f48b304792fa8cd726dcadd3d7455a1d.bindPopup(popup_96427006d46b1cddf0845023a651edb2)
+        ;
+
+        
+    
+    
+            marker_f48b304792fa8cd726dcadd3d7455a1d.bindTooltip(
+                `<div>
+                     Wat Arun ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f48b304792fa8cd726dcadd3d7455a1d.setIcon(icon_946a565ff213f333ffb5a37563032251);
+            
+    
+            var marker_e5c6194ad995f057f014826b874a85f7 = L.marker(
+                [13.7267, 100.51],
+                {
+}
+            ).addTo(feature_group_56a3d2d1e7d5366f1906ddc374222355);
+        
+    
+            var icon_b16395465f616fa19ffcd5b86d24551b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0ce5a63b4ed5a9c9c224efe05285053a = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_cd7573820955ad116de616821a51b7b6 = $(`<div id="html_cd7573820955ad116de616821a51b7b6" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#e74c3c;">Iconsiam</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 1: Old Town + Riverside | Stop #4</div>         <div style="font-size:13px;line-height:1.4;">15:00-18:00 | Gentle Monster + Dior + SookSiam. Buy river pass!</div></div></div>`)[0];
+                popup_0ce5a63b4ed5a9c9c224efe05285053a.setContent(html_cd7573820955ad116de616821a51b7b6);
+            
+        
+
+        marker_e5c6194ad995f057f014826b874a85f7.bindPopup(popup_0ce5a63b4ed5a9c9c224efe05285053a)
+        ;
+
+        
+    
+    
+            marker_e5c6194ad995f057f014826b874a85f7.bindTooltip(
+                `<div>
+                     Iconsiam ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e5c6194ad995f057f014826b874a85f7.setIcon(icon_b16395465f616fa19ffcd5b86d24551b);
+            
+    
+            var poly_line_76681b627d6030f94dad98739b5ab9c2 = L.polyline(
+                [[13.751, 100.4927], [13.7463, 100.4928], [13.7437, 100.4888], [13.7267, 100.51]],
+                {"bubblingMouseEvents": true, "color": "#e74c3c", "dashArray": "10", "dashOffset": null, "fill": false, "fillColor": "#e74c3c", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_56a3d2d1e7d5366f1906ddc374222355);
+        
+    
+            poly_line_76681b627d6030f94dad98739b5ab9c2.bindTooltip(
+                `<div>
+                     Route: Day 1: Old Town + Riverside
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            feature_group_56a3d2d1e7d5366f1906ddc374222355.addTo(map_b96070671abb5bf9b51ca12463970232);
+        
+    
+            var feature_group_57983f861949826ec3cadfb118da2159 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_4f49c45d968aa72b1136bf23a872da76 = L.marker(
+                [13.7374, 100.5134],
+                {
+}
+            ).addTo(feature_group_57983f861949826ec3cadfb118da2159);
+        
+    
+            var icon_b3d736f2923ce9ac9a1a1f120d3cf79f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "tower",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_35b6c40e65881f28d888f851315c7869 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_1858b64e1a05182ad077234d5d062622 = $(`<div id="html_1858b64e1a05182ad077234d5d062622" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#3498db;">Wat Traimit (Golden Buddha)</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 2: Chinatown → Thong Lor | Stop #1</div>         <div style="font-size:13px;line-height:1.4;">09:00-09:45 | ฿40 | 5.5 ton gold Buddha. MRT: Hua Lamphong</div></div></div>`)[0];
+                popup_35b6c40e65881f28d888f851315c7869.setContent(html_1858b64e1a05182ad077234d5d062622);
+            
+        
+
+        marker_4f49c45d968aa72b1136bf23a872da76.bindPopup(popup_35b6c40e65881f28d888f851315c7869)
+        ;
+
+        
+    
+    
+            marker_4f49c45d968aa72b1136bf23a872da76.bindTooltip(
+                `<div>
+                     Wat Traimit (Golden Buddha) ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4f49c45d968aa72b1136bf23a872da76.setIcon(icon_b3d736f2923ce9ac9a1a1f120d3cf79f);
+            
+    
+            var marker_027e6fd409ae6932bf0552a0b1e10a76 = L.marker(
+                [13.753, 100.506],
+                {
+}
+            ).addTo(feature_group_57983f861949826ec3cadfb118da2159);
+        
+    
+            var icon_aa6ce98a93e0cb2bc91a625e36f291ce = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "glass",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9d79c4f398699443265b3806a49992df = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_45832d5b1500a84b1dae56907e292099 = $(`<div id="html_45832d5b1500a84b1dae56907e292099" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#3498db;">Nana Coffee Roaster</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 2: Chinatown → Thong Lor | Stop #2</div>         <div style="font-size:13px;line-height:1.4;">10:00-11:00 | Soi Nana, Pom Prap. Near Chinatown! Most popular cafe in BKK</div></div></div>`)[0];
+                popup_9d79c4f398699443265b3806a49992df.setContent(html_45832d5b1500a84b1dae56907e292099);
+            
+        
+
+        marker_027e6fd409ae6932bf0552a0b1e10a76.bindPopup(popup_9d79c4f398699443265b3806a49992df)
+        ;
+
+        
+    
+    
+            marker_027e6fd409ae6932bf0552a0b1e10a76.bindTooltip(
+                `<div>
+                     Nana Coffee Roaster ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_027e6fd409ae6932bf0552a0b1e10a76.setIcon(icon_aa6ce98a93e0cb2bc91a625e36f291ce);
+            
+    
+            var marker_02757af61501a093958ac2cc7fd5c639 = L.marker(
+                [13.735, 100.509],
+                {
+}
+            ).addTo(feature_group_57983f861949826ec3cadfb118da2159);
+        
+    
+            var icon_ccdf753beea3b09b6be0b8ba42cc1fe2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "picture",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e294204c2b1230b7796eb2a2ea210c8e = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_6f4f1adce1b0db510f12d429fb6bd106 = $(`<div id="html_6f4f1adce1b0db510f12d429fb6bd106" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#3498db;">Talat Noi / Song Wat</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 2: Chinatown → Thong Lor | Stop #3</div>         <div style="font-size:13px;line-height:1.4;">11:00-13:00 | Street art + Mother Roaster + lunch</div></div></div>`)[0];
+                popup_e294204c2b1230b7796eb2a2ea210c8e.setContent(html_6f4f1adce1b0db510f12d429fb6bd106);
+            
+        
+
+        marker_02757af61501a093958ac2cc7fd5c639.bindPopup(popup_e294204c2b1230b7796eb2a2ea210c8e)
+        ;
+
+        
+    
+    
+            marker_02757af61501a093958ac2cc7fd5c639.bindTooltip(
+                `<div>
+                     Talat Noi / Song Wat ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_02757af61501a093958ac2cc7fd5c639.setIcon(icon_ccdf753beea3b09b6be0b8ba42cc1fe2);
+            
+    
+            var marker_ceb0e978af4d90375965195e9605392f = L.marker(
+                [13.718, 100.576],
+                {
+}
+            ).addTo(feature_group_57983f861949826ec3cadfb118da2159);
+        
+    
+            var icon_6b5ab5190f9091e7a57537dcd903f212 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "picture",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6271a2d9b3d4eb19efb13bfd8925cde2 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_cd0de2b81a7d3f4c7e65e4214b7a08d4 = $(`<div id="html_cd0de2b81a7d3f4c7e65e4214b7a08d4" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#3498db;">Dib Gallery</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 2: Chinatown → Thong Lor | Stop #4</div>         <div style="font-size:13px;line-height:1.4;">14:00-16:30 | Sukhumvit Soi 40. Contemporary art. Thu-Mon 10-19</div></div></div>`)[0];
+                popup_6271a2d9b3d4eb19efb13bfd8925cde2.setContent(html_cd0de2b81a7d3f4c7e65e4214b7a08d4);
+            
+        
+
+        marker_ceb0e978af4d90375965195e9605392f.bindPopup(popup_6271a2d9b3d4eb19efb13bfd8925cde2)
+        ;
+
+        
+    
+    
+            marker_ceb0e978af4d90375965195e9605392f.bindTooltip(
+                `<div>
+                     Dib Gallery ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ceb0e978af4d90375965195e9605392f.setIcon(icon_6b5ab5190f9091e7a57537dcd903f212);
+            
+    
+            var marker_235992fcaf8b8f248caf805310499d44 = L.marker(
+                [13.715, 100.578],
+                {
+}
+            ).addTo(feature_group_57983f861949826ec3cadfb118da2159);
+        
+    
+            var icon_f027fcccbceb8efe4a2885a5ac047be5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "cloud",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b52cc31940fac897d55a4f0d23fd5bd8 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_368d299cdb30d5bc44fcce8f4939d436 = $(`<div id="html_368d299cdb30d5bc44fcce8f4939d436" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#3498db;">Tichuca Rooftop</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 2: Chinatown → Thong Lor | Stop #5</div>         <div style="font-size:13px;line-height:1.4;">17:00+ | 46F T-One Building, Soi 40. SAME STREET as Dib! Opens 17:00</div></div></div>`)[0];
+                popup_b52cc31940fac897d55a4f0d23fd5bd8.setContent(html_368d299cdb30d5bc44fcce8f4939d436);
+            
+        
+
+        marker_235992fcaf8b8f248caf805310499d44.bindPopup(popup_b52cc31940fac897d55a4f0d23fd5bd8)
+        ;
+
+        
+    
+    
+            marker_235992fcaf8b8f248caf805310499d44.bindTooltip(
+                `<div>
+                     Tichuca Rooftop ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_235992fcaf8b8f248caf805310499d44.setIcon(icon_f027fcccbceb8efe4a2885a5ac047be5);
+            
+    
+            var poly_line_d503414af34546d4ac3fbc90af618521 = L.polyline(
+                [[13.7374, 100.5134], [13.753, 100.506], [13.735, 100.509], [13.718, 100.576], [13.715, 100.578]],
+                {"bubblingMouseEvents": true, "color": "#3498db", "dashArray": "10", "dashOffset": null, "fill": false, "fillColor": "#3498db", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_57983f861949826ec3cadfb118da2159);
+        
+    
+            poly_line_d503414af34546d4ac3fbc90af618521.bindTooltip(
+                `<div>
+                     Route: Day 2: Chinatown → Thong Lor
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            feature_group_57983f861949826ec3cadfb118da2159.addTo(map_b96070671abb5bf9b51ca12463970232);
+        
+    
+            var feature_group_81f06d70bb626628f497aacfc81a83e3 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_900555ac720961ba1c4e6b1542aea797 = L.marker(
+                [13.7999, 100.55],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_e6f03b3901e890afbb41589daf5b48be = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "shopping-cart",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8d60688ab8c058882b59921f8536484d = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_070a109cd27386f7c13adab84c7f0d2f = $(`<div id="html_070a109cd27386f7c13adab84c7f0d2f" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">Chatuchak Weekend Market</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #1</div>         <div style="font-size:13px;line-height:1.4;">09:00-12:30 | Sat-Sun only! BTS Mo Chit</div></div></div>`)[0];
+                popup_8d60688ab8c058882b59921f8536484d.setContent(html_070a109cd27386f7c13adab84c7f0d2f);
+            
+        
+
+        marker_900555ac720961ba1c4e6b1542aea797.bindPopup(popup_8d60688ab8c058882b59921f8536484d)
+        ;
+
+        
+    
+    
+            marker_900555ac720961ba1c4e6b1542aea797.bindTooltip(
+                `<div>
+                     Chatuchak Weekend Market ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_900555ac720961ba1c4e6b1542aea797.setIcon(icon_e6f03b3901e890afbb41589daf5b48be);
+            
+    
+            var marker_7569f1ad28edbc08328222eab7099782 = L.marker(
+                [13.8017, 100.5525],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_71aeaf39f034d679a150829c4baa01cf = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "shopping-cart",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7735868ca6dc188a30ad51171c9900ad = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_1c46f34a4ec32318883de917284002d6 = $(`<div id="html_1c46f34a4ec32318883de917284002d6" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">Or Tor Kor Market</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #1</div>         <div style="font-size:13px;line-height:1.4;">Weekday alt | Next to Chatuchak. Best fruits in Thailand</div></div></div>`)[0];
+                popup_7735868ca6dc188a30ad51171c9900ad.setContent(html_1c46f34a4ec32318883de917284002d6);
+            
+        
+
+        marker_7569f1ad28edbc08328222eab7099782.bindPopup(popup_7735868ca6dc188a30ad51171c9900ad)
+        ;
+
+        
+    
+    
+            marker_7569f1ad28edbc08328222eab7099782.bindTooltip(
+                `<div>
+                     Or Tor Kor Market ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7569f1ad28edbc08328222eab7099782.setIcon(icon_71aeaf39f034d679a150829c4baa01cf);
+            
+    
+            var marker_36d318fd01a3c5e92dc3dce694d4db94 = L.marker(
+                [13.7455, 100.5335],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_72e30b1652c606a3a4955936f003b307 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "tag",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2d7f7686ef514ae97dc6a2560b1e9ca4 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_0122372805a46a043008b216495cb189 = $(`<div id="html_0122372805a46a043008b216495cb189" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">URTHE</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #2</div>         <div style="font-size:13px;line-height:1.4;">13:00 | Siam Square Soi 2. MUST BUY t-shirts ~฿600</div></div></div>`)[0];
+                popup_2d7f7686ef514ae97dc6a2560b1e9ca4.setContent(html_0122372805a46a043008b216495cb189);
+            
+        
+
+        marker_36d318fd01a3c5e92dc3dce694d4db94.bindPopup(popup_2d7f7686ef514ae97dc6a2560b1e9ca4)
+        ;
+
+        
+    
+    
+            marker_36d318fd01a3c5e92dc3dce694d4db94.bindTooltip(
+                `<div>
+                     URTHE ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_36d318fd01a3c5e92dc3dce694d4db94.setIcon(icon_72e30b1652c606a3a4955936f003b307);
+            
+    
+            var marker_437bfe064c4bab9fa4782d8cc8e5d9ec = L.marker(
+                [13.7453, 100.5337],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_11649310efa85015a84e1474a9696c56 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "tag",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cd5a1b773a5fa8467d91d6e6388655fa = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_114b0e70edc8caffd4ddbbdec413b343 = $(`<div id="html_114b0e70edc8caffd4ddbbdec413b343" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">Daddy and the Muscle Academy</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #2</div>         <div style="font-size:13px;line-height:1.4;">Next door to URTHE | Siam Square Soi 2. Stationery & gifts</div></div></div>`)[0];
+                popup_cd5a1b773a5fa8467d91d6e6388655fa.setContent(html_114b0e70edc8caffd4ddbbdec413b343);
+            
+        
+
+        marker_437bfe064c4bab9fa4782d8cc8e5d9ec.bindPopup(popup_cd5a1b773a5fa8467d91d6e6388655fa)
+        ;
+
+        
+    
+    
+            marker_437bfe064c4bab9fa4782d8cc8e5d9ec.bindTooltip(
+                `<div>
+                     Daddy and the Muscle Academy ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_437bfe064c4bab9fa4782d8cc8e5d9ec.setIcon(icon_11649310efa85015a84e1474a9696c56);
+            
+    
+            var marker_d08aa7fe7fa90e8e68055456e34d0bd2 = L.marker(
+                [13.7462, 100.5308],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_fc309a1b484be5b4a701c8f9976873f9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "picture",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e15d5eeaec142061e55c1635ab64ba70 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_b1c8a22f6e883d8c37fef514c9464d4b = $(`<div id="html_b1c8a22f6e883d8c37fef514c9464d4b" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">BACC + OneSiam Skywalk</h4>         <div style="margin-bottom:4px;font-size:14px;">★★☆☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #3</div>         <div style="font-size:13px;line-height:1.4;">14:00 | Free. Gallery meh, Skywalk is cool. BTS National Stadium</div></div></div>`)[0];
+                popup_e15d5eeaec142061e55c1635ab64ba70.setContent(html_b1c8a22f6e883d8c37fef514c9464d4b);
+            
+        
+
+        marker_d08aa7fe7fa90e8e68055456e34d0bd2.bindPopup(popup_e15d5eeaec142061e55c1635ab64ba70)
+        ;
+
+        
+    
+    
+            marker_d08aa7fe7fa90e8e68055456e34d0bd2.bindTooltip(
+                `<div>
+                     BACC + OneSiam Skywalk ★★☆☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d08aa7fe7fa90e8e68055456e34d0bd2.setIcon(icon_fc309a1b484be5b4a701c8f9976873f9);
+            
+    
+            var marker_4e1164c738219daa6eff9aaa496967c5 = L.marker(
+                [13.723, 100.56],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_d6a647d824c11409c759523aec526312 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "tree-conifer",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c93074673f6877af4af1b2f74be53b22 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_35fcf1ea92df2612a3fa7b4137f04ba6 = $(`<div id="html_35fcf1ea92df2612a3fa7b4137f04ba6" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">Benjakitti Forest Park</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #4</div>         <div style="font-size:13px;line-height:1.4;">15:30-18:00 | MRT Queen Sirikit. Suspended walkways, lake. SUNSET!</div></div></div>`)[0];
+                popup_c93074673f6877af4af1b2f74be53b22.setContent(html_35fcf1ea92df2612a3fa7b4137f04ba6);
+            
+        
+
+        marker_4e1164c738219daa6eff9aaa496967c5.bindPopup(popup_c93074673f6877af4af1b2f74be53b22)
+        ;
+
+        
+    
+    
+            marker_4e1164c738219daa6eff9aaa496967c5.bindTooltip(
+                `<div>
+                     Benjakitti Forest Park ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4e1164c738219daa6eff9aaa496967c5.setIcon(icon_d6a647d824c11409c759523aec526312);
+            
+    
+            var marker_e272a680db0fa1a587760a8cd4636bdd = L.marker(
+                [13.722, 100.565],
+                {
+}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            var icon_6fb42e13959e765b41bbeee18f899829 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "cutlery",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b153a664fddd9f24873e217ff3964596 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_47246c8ace473853b483104cbe19d558 = $(`<div id="html_47246c8ace473853b483104cbe19d558" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#2ecc71;">Fatboy Izakaya</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 3: Markets + Siam + Park | Stop #5</div>         <div style="font-size:13px;line-height:1.4;">19:00+ | Great rolls, stylish. Sukhumvit area</div></div></div>`)[0];
+                popup_b153a664fddd9f24873e217ff3964596.setContent(html_47246c8ace473853b483104cbe19d558);
+            
+        
+
+        marker_e272a680db0fa1a587760a8cd4636bdd.bindPopup(popup_b153a664fddd9f24873e217ff3964596)
+        ;
+
+        
+    
+    
+            marker_e272a680db0fa1a587760a8cd4636bdd.bindTooltip(
+                `<div>
+                     Fatboy Izakaya ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e272a680db0fa1a587760a8cd4636bdd.setIcon(icon_6fb42e13959e765b41bbeee18f899829);
+            
+    
+            var poly_line_f9cf3a33ea4b96d51491ac10c8fb0127 = L.polyline(
+                [[13.7999, 100.55], [13.7455, 100.5335], [13.7462, 100.5308], [13.723, 100.56], [13.722, 100.565]],
+                {"bubblingMouseEvents": true, "color": "#2ecc71", "dashArray": "10", "dashOffset": null, "fill": false, "fillColor": "#2ecc71", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_81f06d70bb626628f497aacfc81a83e3);
+        
+    
+            poly_line_f9cf3a33ea4b96d51491ac10c8fb0127.bindTooltip(
+                `<div>
+                     Route: Day 3: Markets + Siam + Park
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            feature_group_81f06d70bb626628f497aacfc81a83e3.addTo(map_b96070671abb5bf9b51ca12463970232);
+        
+    
+            var feature_group_0d72743e27b2f2559e9e3c1a4967648b = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_a7fc33a3e5162c9ea26b6cebfa03e1d0 = L.marker(
+                [13.743, 100.546],
+                {
+}
+            ).addTo(feature_group_0d72743e27b2f2559e9e3c1a4967648b);
+        
+    
+            var icon_1ef72b12a31243f72efeb15184f8dd9e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "glass",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f50d0b76f9c46198a0e9f8835d0442b1 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_e537b3b76f16a3bf5a9736225a986b3a = $(`<div id="html_e537b3b76f16a3bf5a9736225a986b3a" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#9b59b6;">Toby's at Noble Play</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 4: Cafes + Silom + Massage | Stop #1</div>         <div style="font-size:13px;line-height:1.4;">09:00 | BTS Ploenchit. 'BEST BREAKFAST EVER' — Lecya</div></div></div>`)[0];
+                popup_f50d0b76f9c46198a0e9f8835d0442b1.setContent(html_e537b3b76f16a3bf5a9736225a986b3a);
+            
+        
+
+        marker_a7fc33a3e5162c9ea26b6cebfa03e1d0.bindPopup(popup_f50d0b76f9c46198a0e9f8835d0442b1)
+        ;
+
+        
+    
+    
+            marker_a7fc33a3e5162c9ea26b6cebfa03e1d0.bindTooltip(
+                `<div>
+                     Toby's at Noble Play ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a7fc33a3e5162c9ea26b6cebfa03e1d0.setIcon(icon_1ef72b12a31243f72efeb15184f8dd9e);
+            
+    
+            var marker_47784d2dc14beabb79bb14b85c9a8320 = L.marker(
+                [13.7466, 100.5347],
+                {
+}
+            ).addTo(feature_group_0d72743e27b2f2559e9e3c1a4967648b);
+        
+    
+            var icon_368b697e02ad3be7e242d6897ec7ae88 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "picture",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_622d2602f932e23596fd89dc27d2030d = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_97d4447641888cbb522279cff55a6465 = $(`<div id="html_97d4447641888cbb522279cff55a6465" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#9b59b6;">Louis Vuitton Mini Museum</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 4: Cafes + Silom + Massage | Stop #2</div>         <div style="font-size:13px;line-height:1.4;">12:00 | Siam area. Small museum, free gifts at end</div></div></div>`)[0];
+                popup_622d2602f932e23596fd89dc27d2030d.setContent(html_97d4447641888cbb522279cff55a6465);
+            
+        
+
+        marker_47784d2dc14beabb79bb14b85c9a8320.bindPopup(popup_622d2602f932e23596fd89dc27d2030d)
+        ;
+
+        
+    
+    
+            marker_47784d2dc14beabb79bb14b85c9a8320.bindTooltip(
+                `<div>
+                     Louis Vuitton Mini Museum ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_47784d2dc14beabb79bb14b85c9a8320.setIcon(icon_368b697e02ad3be7e242d6897ec7ae88);
+            
+    
+            var marker_f2cd460aa853ba5a477427f0dac5c09d = L.marker(
+                [13.7275, 100.5378],
+                {
+}
+            ).addTo(feature_group_0d72743e27b2f2559e9e3c1a4967648b);
+        
+    
+            var icon_41ad8c41b23daae5179a0d8f747bd844 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "eye-open",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d64999b2f97b941e60542ed2b136be23 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_6cf783a2d50db0c121c00657d809e94d = $(`<div id="html_6cf783a2d50db0c121c00657d809e94d" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#9b59b6;">Dusit Central Park</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 4: Cafes + Silom + Massage | Stop #3</div>         <div style="font-size:13px;line-height:1.4;">13:00 | Silom/Rama IV. Largest rooftop garden in Thailand. Free! Next to Lumphini</div></div></div>`)[0];
+                popup_d64999b2f97b941e60542ed2b136be23.setContent(html_6cf783a2d50db0c121c00657d809e94d);
+            
+        
+
+        marker_f2cd460aa853ba5a477427f0dac5c09d.bindPopup(popup_d64999b2f97b941e60542ed2b136be23)
+        ;
+
+        
+    
+    
+            marker_f2cd460aa853ba5a477427f0dac5c09d.bindTooltip(
+                `<div>
+                     Dusit Central Park ★★★★☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f2cd460aa853ba5a477427f0dac5c09d.setIcon(icon_41ad8c41b23daae5179a0d8f747bd844);
+            
+    
+            var marker_561390b72cddc46e96b5ca06e4c3f117 = L.marker(
+                [13.7308, 100.5412],
+                {
+}
+            ).addTo(feature_group_0d72743e27b2f2559e9e3c1a4967648b);
+        
+    
+            var icon_5966da481114b1d224935e30e2f91ee9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "tree-conifer",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4075e6d09ce06f8b3d0e8e87b5f72e61 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_56ed1d6ea165281c3646adc2baf7c3b8 = $(`<div id="html_56ed1d6ea165281c3646adc2baf7c3b8" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#9b59b6;">Lumphini Park</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★☆☆</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 4: Cafes + Silom + Massage | Stop #4</div>         <div style="font-size:13px;line-height:1.4;">14:00 | Monitor lizards. OK but Benjakitti is better</div></div></div>`)[0];
+                popup_4075e6d09ce06f8b3d0e8e87b5f72e61.setContent(html_56ed1d6ea165281c3646adc2baf7c3b8);
+            
+        
+
+        marker_561390b72cddc46e96b5ca06e4c3f117.bindPopup(popup_4075e6d09ce06f8b3d0e8e87b5f72e61)
+        ;
+
+        
+    
+    
+            marker_561390b72cddc46e96b5ca06e4c3f117.bindTooltip(
+                `<div>
+                     Lumphini Park ★★★☆☆
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_561390b72cddc46e96b5ca06e4c3f117.setIcon(icon_5966da481114b1d224935e30e2f91ee9);
+            
+    
+            var marker_cb544a01a3b3cb0ab1d835bdc7f3b466 = L.marker(
+                [13.729, 100.534],
+                {
+}
+            ).addTo(feature_group_0d72743e27b2f2559e9e3c1a4967648b);
+        
+    
+            var icon_23465a98ca14178fdd006d57f283d2d2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "heart",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b0bece49a8a41d3568dffe38604aa565 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_8b863dd3ed1f84de224e540b3bdf46d1 = $(`<div id="html_8b863dd3ed1f84de224e540b3bdf46d1" style="width: 100.0%; height: 100.0%;"><div style="font-family:system-ui,sans-serif;min-width:240px;max-width:320px;">         <h4 style="margin:0 0 4px;color:#9b59b6;">Thai Massage (Silom area)</h4>         <div style="margin-bottom:4px;font-size:14px;">★★★★★</div>         <div style="font-size:12px;color:#666;margin-bottom:6px;">Day 4: Cafes + Silom + Massage | Stop #5</div>         <div style="font-size:13px;line-height:1.4;">15:00+ | MANDATORY. Oil massage, start with feet. Worse salon = better massage</div></div></div>`)[0];
+                popup_b0bece49a8a41d3568dffe38604aa565.setContent(html_8b863dd3ed1f84de224e540b3bdf46d1);
+            
+        
+
+        marker_cb544a01a3b3cb0ab1d835bdc7f3b466.bindPopup(popup_b0bece49a8a41d3568dffe38604aa565)
+        ;
+
+        
+    
+    
+            marker_cb544a01a3b3cb0ab1d835bdc7f3b466.bindTooltip(
+                `<div>
+                     Thai Massage (Silom area) ★★★★★
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_cb544a01a3b3cb0ab1d835bdc7f3b466.setIcon(icon_23465a98ca14178fdd006d57f283d2d2);
+            
+    
+            var poly_line_9a2278ad4bba059dfa118a7ead8260ac = L.polyline(
+                [[13.743, 100.546], [13.7466, 100.5347], [13.7275, 100.5378], [13.7308, 100.5412], [13.729, 100.534]],
+                {"bubblingMouseEvents": true, "color": "#9b59b6", "dashArray": "10", "dashOffset": null, "fill": false, "fillColor": "#9b59b6", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(feature_group_0d72743e27b2f2559e9e3c1a4967648b);
+        
+    
+            poly_line_9a2278ad4bba059dfa118a7ead8260ac.bindTooltip(
+                `<div>
+                     Route: Day 4: Cafes + Silom + Massage
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            feature_group_0d72743e27b2f2559e9e3c1a4967648b.addTo(map_b96070671abb5bf9b51ca12463970232);
+        
+    
+            var layer_control_0fcd6ae73732fc74013015eb61a75d5a_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_bf7982c9f032ac6789a99ceac870618d,
+                },
+                overlays :  {
+                    "Extras / Anytime" : feature_group_1ed609f75c3a66cab1a4c0052a2d4868,
+                    "Day 1: Old Town + Riverside" : feature_group_56a3d2d1e7d5366f1906ddc374222355,
+                    "Day 2: Chinatown \u2192 Thong Lor" : feature_group_57983f861949826ec3cadfb118da2159,
+                    "Day 3: Markets + Siam + Park" : feature_group_81f06d70bb626628f497aacfc81a83e3,
+                    "Day 4: Cafes + Silom + Massage" : feature_group_0d72743e27b2f2559e9e3c1a4967648b,
+                },
+            };
+            let layer_control_0fcd6ae73732fc74013015eb61a75d5a = L.control.layers(
+                layer_control_0fcd6ae73732fc74013015eb61a75d5a_layers.base_layers,
+                layer_control_0fcd6ae73732fc74013015eb61a75d5a_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_b96070671abb5bf9b51ca12463970232);
+
+        
+</script>
+</html>

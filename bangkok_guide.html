@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bangkok 4-Day Guide</title>
+<style>
+  :root {
+    --day1: #e74c3c; --day1-bg: #fdecea;
+    --day2: #3498db; --day2-bg: #ebf5fb;
+    --day3: #27ae60; --day3-bg: #e9f7ef;
+    --day4: #8e44ad; --day4-bg: #f4ecf7;
+    --gold: #f39c12; --gray: #7f8c8d;
+    --bg: #fafafa; --card: #fff; --text: #2c3e50; --muted: #95a5a6;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    max-width: 900px; margin: 0 auto; padding: 20px;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; border-radius: var(--radius); padding: 40px 32px;
+    margin-bottom: 28px; position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: '🇹🇭'; font-size: 120px; position: absolute;
+    right: 20px; top: 50%; transform: translateY(-50%); opacity: 0.15;
+  }
+  .hero h1 { font-size: 2em; font-weight: 800; margin-bottom: 8px; }
+  .hero p { font-size: 1.05em; opacity: 0.9; max-width: 600px; }
+  .hero .tags { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero .tag {
+    background: rgba(255,255,255,0.2); padding: 4px 12px;
+    border-radius: 20px; font-size: 0.82em; backdrop-filter: blur(4px);
+  }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+    position: sticky; top: 0; z-index: 100; background: var(--bg);
+    padding: 10px 0;
+  }
+  .nav a {
+    padding: 8px 16px; border-radius: 20px; text-decoration: none;
+    font-size: 0.85em; font-weight: 600; transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .nav a:hover { transform: translateY(-1px); }
+  .nav a.d1 { background: var(--day1-bg); color: var(--day1); border-color: var(--day1); }
+  .nav a.d2 { background: var(--day2-bg); color: var(--day2); border-color: var(--day2); }
+  .nav a.d3 { background: var(--day3-bg); color: var(--day3); border-color: var(--day3); }
+  .nav a.d4 { background: var(--day4-bg); color: var(--day4); border-color: var(--day4); }
+  .nav a.dn { background: #f0f0f0; color: #555; border-color: #ddd; }
+
+  /* ── SECTIONS ── */
+  section { margin-bottom: 36px; }
+  .section-title {
+    font-size: 1.35em; font-weight: 800; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .dot {
+    width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  }
+
+  /* ── RATINGS TABLE ── */
+  .ratings-grid {
+    display: grid; gap: 8px;
+  }
+  .rating-row {
+    display: grid; grid-template-columns: 44px 1fr 100px 80px;
+    align-items: center; padding: 10px 14px; border-radius: 8px;
+    background: var(--card); border-left: 4px solid transparent;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: all 0.15s;
+  }
+  .rating-row:hover { transform: translateX(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .rating-row.r5 { border-left-color: var(--day1); }
+  .rating-row.r4 { border-left-color: var(--gold); }
+  .rating-row.r3 { border-left-color: var(--muted); }
+  .rating-row.r2 { border-left-color: #ddd; }
+  .rating-rank {
+    font-size: 1.3em; font-weight: 800; color: var(--muted);
+  }
+  .rating-name { font-weight: 600; font-size: 0.95em; }
+  .rating-name small { font-weight: 400; color: var(--muted); display: block; font-size: 0.82em; }
+  .rating-stars { font-size: 0.9em; letter-spacing: 1px; }
+  .rating-stars .on { color: var(--gold); }
+  .rating-stars .off { color: #e0e0e0; }
+  .rating-verdict {
+    font-size: 0.75em; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; text-align: right;
+  }
+  .v-must { color: var(--day1); }
+  .v-great { color: var(--gold); }
+  .v-ok { color: var(--muted); }
+  .v-skip { color: #ccc; }
+
+  /* ── DAY CARDS ── */
+  .day-card {
+    background: var(--card); border-radius: var(--radius);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .day-header {
+    padding: 20px 24px; color: white; display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .day-header h2 { font-size: 1.25em; }
+  .day-header .day-num {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.25); display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.3em; font-weight: 800;
+  }
+  .day-header.d1 { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+  .day-header.d2 { background: linear-gradient(135deg, #3498db, #2980b9); }
+  .day-header.d3 { background: linear-gradient(135deg, #27ae60, #1e8449); }
+  .day-header.d4 { background: linear-gradient(135deg, #8e44ad, #6c3483); }
+  .day-body { padding: 0 24px 20px; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; margin-top: 16px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 8px;
+    bottom: 8px; width: 2px; background: #e8e8e8;
+  }
+  .tl-item {
+    position: relative; padding-bottom: 18px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -24px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 3px solid currentColor; background: white; z-index: 1;
+  }
+  .tl-time {
+    font-size: 0.78em; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .tl-title {
+    font-weight: 700; font-size: 1em; margin: 2px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tl-title .stars { font-size: 0.8em; }
+  .tl-title .stars .on { color: var(--gold); }
+  .tl-title .stars .off { color: #e0e0e0; }
+  .tl-desc {
+    font-size: 0.85em; color: #666; line-height: 1.5;
+  }
+  .tl-quote {
+    font-style: italic; background: #f8f8f8; padding: 6px 10px;
+    border-radius: 6px; margin-top: 4px; font-size: 0.82em;
+    border-left: 3px solid var(--gold); color: #555;
+  }
+  .tl-transport {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.75em; color: var(--muted); margin: 6px 0;
+    background: #f5f5f5; padding: 2px 10px; border-radius: 12px;
+  }
+
+  .alt-box {
+    background: #f9f9f9; border-radius: 8px; padding: 12px 16px;
+    margin-top: 12px; border: 1px dashed #ddd;
+  }
+  .alt-box .alt-title { font-weight: 700; font-size: 0.85em; margin-bottom: 6px; }
+  .alt-box .alt-option {
+    font-size: 0.85em; padding: 3px 0;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .alt-letter {
+    width: 20px; height: 20px; border-radius: 50%; font-size: 0.7em;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; background: var(--muted); flex-shrink: 0;
+  }
+
+  .tip-box {
+    background: #fffde7; border-radius: 8px; padding: 10px 14px;
+    margin-top: 14px; font-size: 0.85em; border-left: 3px solid var(--gold);
+  }
+
+  /* ── SKIP TABLE ── */
+  .skip-grid { display: grid; gap: 8px; }
+  .skip-row {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    padding: 10px 14px; border-radius: 8px; background: var(--card);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); font-size: 0.88em;
+    align-items: center;
+  }
+  .skip-row .name { font-weight: 600; }
+  .skip-row .reason { color: var(--muted); }
+  .skip-row .alt { font-size: 0.8em; color: var(--day2); }
+
+  /* ── TRANSPORT ── */
+  .transport-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .transport-card {
+    background: var(--card); border-radius: 8px; padding: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); text-align: center;
+  }
+  .transport-card .icon { font-size: 1.8em; margin-bottom: 4px; }
+  .transport-card .name { font-weight: 700; font-size: 0.9em; }
+  .transport-card .info { font-size: 0.78em; color: var(--muted); }
+
+  .map-link {
+    display: block; text-align: center; padding: 18px; background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; border-radius: var(--radius); text-decoration: none;
+    font-weight: 700; font-size: 1.1em; margin: 24px 0;
+    box-shadow: 0 4px 15px rgba(102,126,234,0.4); transition: all 0.2s;
+  }
+  .map-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.5); }
+
+  .footer {
+    text-align: center; padding: 32px 0 16px; color: var(--muted);
+    font-size: 0.82em;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    .hero { padding: 24px 20px; }
+    .hero h1 { font-size: 1.5em; }
+    .rating-row { grid-template-columns: 32px 1fr 80px; }
+    .rating-verdict { display: none; }
+    .skip-row { grid-template-columns: 1fr 1fr; }
+    .skip-row .alt { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+  <h1>Bangkok — 4 дня</h1>
+  <p>Маршрут по рекомендациям от Lecya + друзей. Всё оценено, кластеризовано по зонам, минимум перемещений.</p>
+  <div class="tags">
+    <span class="tag">храмы</span>
+    <span class="tag">стрит-фуд</span>
+    <span class="tag">кофейни</span>
+    <span class="tag">стрит-арт</span>
+    <span class="tag">руфтопы</span>
+    <span class="tag">шоппинг</span>
+    <span class="tag">массаж</span>
+  </div>
+</div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav">
+  <a href="#ratings" class="dn">Рейтинг</a>
+  <a href="#day1" class="d1">День 1</a>
+  <a href="#day2" class="d2">День 2</a>
+  <a href="#day3" class="d3">День 3</a>
+  <a href="#day4" class="d4">День 4</a>
+  <a href="#skip" class="dn">Что пропустить</a>
+  <a href="#transport" class="dn">Транспорт</a>
+</nav>
+
+<!-- ═══════════ RATINGS ═══════════ -->
+<section id="ratings">
+  <div class="section-title">Рейтинг всех рекомендаций</div>
+  <div class="ratings-grid">
+
+    <div class="rating-row r5">
+      <div class="rating-rank">1</div>
+      <div class="rating-name">Grand Palace + Wat Pho<small>Храмы + массаж, Old Town</small></div>
+      <div class="rating-stars"><span class="on">★★★★★</span></div>
+      <div class="rating-verdict v-must">MUST</div>
+    </div>
+
+    <div class="rating-row r5">
+      <div class="rating-rank">2</div>
+      <div class="rating-name">Тайский массаж<small>«Чем хуже салон, тем лучше массаж»</small></div>
+      <div class="rating-stars"><span class="on">★★★★★</span></div>
+      <div class="rating-verdict v-must">MUST</div>
+    </div>
+
+    <div class="rating-row r5">
+      <div class="rating-rank">3</div>
+      <div class="rating-name">Toby's at Noble Play<small>«Лучший завтрак в моей жизни»</small></div>
+      <div class="rating-stars"><span class="on">★★★★★</span></div>
+      <div class="rating-verdict v-must">MUST</div>
+    </div>
+
+    <div class="rating-row r5">
+      <div class="rating-rank">4</div>
+      <div class="rating-name">Chatuchak Market<small>Только Сб-Вс! 15 000 палаток</small></div>
+      <div class="rating-stars"><span class="on">★★★★★</span></div>
+      <div class="rating-verdict v-must">MUST</div>
+    </div>
+
+    <div class="rating-row r5">
+      <div class="rating-rank">5</div>
+      <div class="rating-name">URTHE<small>«Лучшие футболки за 2к руб!!!» — Lecya</small></div>
+      <div class="rating-stars"><span class="on">★★★★★</span></div>
+      <div class="rating-verdict v-must">MUST</div>
+    </div>
+
+    <div class="rating-row r5">
+      <div class="rating-rank">6</div>
+      <div class="rating-name">Benjakitti Forest Park<small>«Сильно круче Lumphini» — подвесные мостики, озеро</small></div>
+      <div class="rating-stars"><span class="on">★★★★★</span></div>
+      <div class="rating-verdict v-must">MUST</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">7</div>
+      <div class="rating-name">Iconsiam<small>Gentle Monster (собака!) + Dior + SookSiam</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">8</div>
+      <div class="rating-name">Talat Noi / Song Wat<small>Стрит-арт, винтаж, Mother Roaster</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">9</div>
+      <div class="rating-name">Dib Gallery<small>Современное искусство, «инсталляции растрогали»</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">10</div>
+      <div class="rating-name">Tichuca Rooftop<small>Лучше Mahanakhon (по мнению Lecya)</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">11</div>
+      <div class="rating-name">Nana Coffee Roaster<small>Самая популярная кофейня BKK, свой сад</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">12</div>
+      <div class="rating-name">Wat Traimit (Золотой Будда)<small>5.5 тонн чистого золота</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">13</div>
+      <div class="rating-name">Dusit Central Park (5 этаж)<small>Красивая смотровая площадка</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">14</div>
+      <div class="rating-name">Fatboy Izakaya<small>«Оч вкусные роллы, стилевый дизайн»</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">15</div>
+      <div class="rating-name">Ksana Matcha<small>«Тихие и заземляющие, единение с собой»</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-rank">16</div>
+      <div class="rating-name">Drag-шоу @ Stranger<small>«Была в восторге» — не для всех, но уникально</small></div>
+      <div class="rating-stars"><span class="on">★★★★</span><span class="off">☆</span></div>
+      <div class="rating-verdict v-great">GREAT</div>
+    </div>
+
+    <div class="rating-row r3">
+      <div class="rating-rank">17</div>
+      <div class="rating-name">Wat Arun<small>Иконика, но «толпы и не впечатлило» — быстрый визит</small></div>
+      <div class="rating-stars"><span class="on">★★★</span><span class="off">☆☆</span></div>
+      <div class="rating-verdict v-ok">OK</div>
+    </div>
+
+    <div class="rating-row r3">
+      <div class="rating-rank">18</div>
+      <div class="rating-name">Chinatown / Yaowarat<small>Поляризует: «ужас» vs «вайбово». Вечером лучше.</small></div>
+      <div class="rating-stars"><span class="on">★★★</span><span class="off">☆☆</span></div>
+      <div class="rating-verdict v-ok">50/50</div>
+    </div>
+
+    <div class="rating-row r3">
+      <div class="rating-rank">19</div>
+      <div class="rating-name">LV Mini Museum<small>Маленький, подарки в конце</small></div>
+      <div class="rating-stars"><span class="on">★★★</span><span class="off">☆☆</span></div>
+      <div class="rating-verdict v-ok">OK</div>
+    </div>
+
+    <div class="rating-row r3">
+      <div class="rating-rank">20</div>
+      <div class="rating-name">Lumphini Park<small>«Кроме варанов ничего нет» — Benjakitti лучше</small></div>
+      <div class="rating-stars"><span class="on">★★★</span><span class="off">☆☆</span></div>
+      <div class="rating-verdict v-ok">OK</div>
+    </div>
+
+    <div class="rating-row r2">
+      <div class="rating-rank">21</div>
+      <div class="rating-name">BACC<small>«Скучно, но бесплатно» + Skywalk рядом ок</small></div>
+      <div class="rating-stars"><span class="on">★★</span><span class="off">☆☆☆</span></div>
+      <div class="rating-verdict v-skip">MEH</div>
+    </div>
+
+    <div class="rating-row r2">
+      <div class="rating-rank">22</div>
+      <div class="rating-name">Arabica 58F<small>«Кофе ужасный, возьмите мороженое»</small></div>
+      <div class="rating-stars"><span class="on">★★</span><span class="off">☆☆☆</span></div>
+      <div class="rating-verdict v-skip">MEH</div>
+    </div>
+
+    <div class="rating-row r2">
+      <div class="rating-rank">23</div>
+      <div class="rating-name">BKK Social Club<small>Дорогущие коктейли, только вид</small></div>
+      <div class="rating-stars"><span class="on">★★</span><span class="off">☆☆☆</span></div>
+      <div class="rating-verdict v-skip">MEH</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ MAP LINK ═══════════ -->
+<a href="bangkok_map.html" class="map-link">
+  🗺 Открыть интерактивную карту с маршрутами
+</a>
+
+<!-- ═══════════ DAY 1 ═══════════ -->
+<section id="day1">
+<div class="day-card">
+  <div class="day-header d1">
+    <div>
+      <h2>Храмы + Iconsiam</h2>
+      <small style="opacity:0.8">Old Town → River → Iconsiam — весь день на воде, без такси</small>
+    </div>
+    <div class="day-num">1</div>
+  </div>
+  <div class="day-body">
+    <div class="timeline" style="color: var(--day1);">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">08:30 — 11:00</div>
+        <div class="tl-title">Grand Palace + Wat Phra Kaew <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">Безальтернативный #1. Изумрудный Будда, золотые шпили, мозаичные здания. Билет ฿500.</div>
+        <div class="tl-transport">↓ 5 мин пешком</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">11:00 — 13:00</div>
+        <div class="tl-title">Wat Pho + Тайский массаж <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">46-метровый золотой Будда. Массаж прямо тут: ฿260/30мин — лучший в BKK.</div>
+        <div class="tl-quote">ОБЯЗАТЕЛЬНО СХОДИТЕ НА ТАЙСКИЙ МАССАЖ. Чем хуже салон — тем дешевле и лучше. — Lecya</div>
+        <div class="tl-transport">↓ паром через реку (฿4, 3 мин)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">13:30 — 14:00</div>
+        <div class="tl-title">Wat Arun <span class="stars"><span class="on">★★★</span><span class="off">☆☆</span></span></div>
+        <div class="tl-desc">Иконично, но быстрый осмотр (30 мин). Билет ฿100.</div>
+        <div class="tl-quote">Там тооооолпы людей, все в костюмах, не прям впечатлило — Lecya</div>
+        <div class="tl-transport">↓ бот вдоль реки на юг (оба на зап. берегу, ~10 мин)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">15:00 — 18:00</div>
+        <div class="tl-title">Iconsiam <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">Gentle Monster (с собакой!) + золотой Dior (зайти поглазеть) + SookSiam food floor (еда из 77 провинций).</div>
+        <div class="tl-quote">Купить речной пасс (hop-on-hop-off) — бумажку на пирсе, кататься сколько угодно — Lecya</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">18:30+</div>
+        <div class="tl-title">Вечер</div>
+        <div class="alt-box">
+          <div class="alt-title">Остаёмся в зоне реки:</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--day1)">A</span> <strong>Ужин в SookSiam (Iconsiam)</strong> — еда 77 провинций, без спешки ★★★★☆</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--gold)">B</span> <strong>Yaowarat / Chinatown</strong> — шаттл-бот → MRT Wat Mangkon (20 мин). Стрит-фуд. Поляризует! ★★★☆☆</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--muted)">C</span> <strong>Charoen Krung bars</strong> — район рядом с Saphan Taksin, модные бары ★★★☆☆</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="tip-box">
+      <strong>Dress code:</strong> Grand Palace — колени + плечи закрыты, без шлёпок. Приходить к 08:30 до толп. Не верить «сегодня закрыто» — это скам.<br>
+      <strong>Транспорт:</strong> Весь день на ботах и пешком! Wat Arun и Iconsiam оба на западном берегу — бот вдоль реки, не надо переправляться обратно.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ DAY 2 ═══════════ -->
+<section id="day2">
+<div class="day-card">
+  <div class="day-header d2">
+    <div>
+      <h2>Chinatown + Talat Noi + Thong Lor</h2>
+      <small style="opacity:0.8">Chinatown утро → одно такси → Thong Lor вечер (Dib + Tichuca на одной улице!)</small>
+    </div>
+    <div class="day-num">2</div>
+  </div>
+  <div class="day-body">
+    <div class="timeline" style="color: var(--day2);">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">09:00 — 09:45</div>
+        <div class="tl-title">Wat Traimit (Золотой Будда) <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">5.5 тонн чистого золота. Прятался под штукатуркой 200 лет. Билет ฿40. MRT: Hua Lamphong.</div>
+        <div class="tl-transport">↓ 10 мин пешком (тот же район)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">10:00 — 11:00</div>
+        <div class="tl-title">Nana Coffee Roaster <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">Самая инстаграмная кофейня BKK. Свой сад, интересные люди. Soi Nana, Pom Prap — рядом с Chinatown.</div>
+        <div class="tl-quote">Самая популярная кофейня Бангкока, свой сад, куча интересных людей — Lecya</div>
+        <div class="tl-transport">↓ 15 мин пешком на юг</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">11:00 — 13:00</div>
+        <div class="tl-title">Talat Noi / Song Wat <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">Стрит-арт, винтажные магазины, граффити, местная жизнь. Обед тут же.</div>
+        <div class="tl-quote">Начать от Mother Roaster — на 1 этаже треш с великами, на 2 этаже спешалти кофейня)) — Lecya</div>
+        <div class="tl-transport">↓ такси 15-20 мин в Thong Lor (единственный переезд за день)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">14:00 — 16:30</div>
+        <div class="tl-title">Dib Gallery <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">Современное искусство. Sukhumvit Soi 40 (Thong Lor). Открыт Чт-Пн, 10-19.</div>
+        <div class="tl-quote">Ближе к концу инсталляции, которые прям растрогали. Даже просто за вайбом рекомендую. — Lecya</div>
+        <div class="tl-transport">↓ 5 мин пешком (та же улица!)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">17:00+</div>
+        <div class="tl-title">Tichuca Rooftop <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">46 этаж, T-One Building, Sukhumvit Soi 40. Тот же сой что и Dib! Открыт с 17:00. Sunset + коктейли.</div>
+        <div class="tl-quote">Лучше Mahanakhon — Lecya. Jungle-тема, медуза из LED, 360° вид.</div>
+      </div>
+
+    </div>
+    <div class="tip-box">
+      <strong>Фишка дня:</strong> Dib Gallery и Tichuca — на одной и той же улице (Sukhumvit Soi 40, Thong Lor). Посмотрел арт → 5 минут пешком → руфтоп на закат. Единственное такси за день: Talat Noi → Thong Lor после обеда.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ DAY 3 ═══════════ -->
+<section id="day3">
+<div class="day-card">
+  <div class="day-header d3">
+    <div>
+      <h2>Рынки + Шоппинг + Парк</h2>
+      <small style="opacity:0.8">BTS на юг: Chatuchak → Siam Square → Benjakitti — одна линия, без такси</small>
+    </div>
+    <div class="day-num">3</div>
+  </div>
+  <div class="day-body">
+    <div class="timeline" style="color: var(--day3);">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">09:00 — 12:30</div>
+        <div class="tl-title">Chatuchak Weekend Market <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">15 000 палаток. Секции 2-4 (декор), 7-9 (одежда), 17-19 (арт). Coconut ice cream обязательно.</div>
+        <div class="tl-quote">Только Сб-Вс! В будни замена: Or Tor Kor Market (лучшие фрукты Тая) ★★★★☆</div>
+        <div class="tl-transport">↓ BTS Mo Chit → Siam (20 мин)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">13:00 — 14:00</div>
+        <div class="tl-title">URTHE + Daddy and the Muscle Academy <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">Siam Square Soi 2. URTHE: футболки ~฿600 (~2000₽). Рядом (соседняя дверь): канцелярия и подарки.</div>
+        <div class="tl-quote">Охуительные лучшие в моей жизни футболки!!! Если есть место в багаже — купите, молю! — Lecya</div>
+        <div class="tl-transport">↓ 3 мин пешком (тот же Siam Square)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">14:00 — 15:00</div>
+        <div class="tl-title">BACC + OneSiam Skywalk <span class="stars"><span class="on">★★</span><span class="off">☆☆☆</span></span></div>
+        <div class="tl-desc">Галерея скучная, но бесплатно. Skywalk у моста рядом — прикольное пространство.</div>
+        <div class="tl-transport">↓ BTS Siam → Queen Sirikit (3 остановки, 10 мин)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">15:30 — 18:00</div>
+        <div class="tl-title">Benjakitti Forest Park <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">MRT Queen Sirikit. Многоярусный, подвесные мостики, озеро с набережной. ЗАКАТ тут.</div>
+        <div class="tl-quote">Сильно круче Lumphini! Большой, с озером и подвесными мостиками — обе подруги</div>
+        <div class="tl-transport">↓ пешком 10 мин (тот же район Sukhumvit)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">19:00+</div>
+        <div class="tl-title">Fatboy Izakaya <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">Ужин. Вкусные роллы, стилевый дизайн. Sukhumvit area.</div>
+      </div>
+
+    </div>
+    <div class="tip-box">
+      <strong>Chatuchak:</strong> Приходить к 09:00 — до жары. Пить воду постоянно. Взять карту на info booth. Кокосовое мороженое — всюду, брать не думая.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ DAY 4 ═══════════ -->
+<section id="day4">
+<div class="day-card">
+  <div class="day-header d4">
+    <div>
+      <h2>Кафе + Культура + Массаж</h2>
+      <small style="opacity:0.8">BTS на юг: Ploenchit → Siam → Silom — одна линия, без такси</small>
+    </div>
+    <div class="day-num">4</div>
+  </div>
+  <div class="day-body">
+    <div class="timeline" style="color: var(--day4);">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">09:00 — 10:30</div>
+        <div class="tl-title">Toby's at Noble Play <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">Австралийский завтрак. Космическое качество продуктов.</div>
+        <div class="tl-quote">Лучший завтрак в моей жизни — Lecya</div>
+        <div class="tl-transport">↓ такси / BTS 10 мин</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">11:00 — 12:00</div>
+        <div class="tl-title">Кофейня + прогулка</div>
+        <div class="alt-box">
+          <div class="alt-title">По пути (Ploenchit → Siam):</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--day4)">A</span> <strong>Ksana Matcha</strong> — тихо, матча, «заземляющая», единение с собой ★★★★☆</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--gold)">B</span> <strong>Kay's</strong> — рекомендовано, уютное кафе ★★★☆☆</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--muted)">C</span> <strong>(not just) Another Cup of Tea</strong> — необычное название, хороший кофе ★★★☆☆</div>
+        </div>
+        <div class="tl-transport">↓ BTS 1 остановка до Siam</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">12:00 — 12:45</div>
+        <div class="tl-title">Louis Vuitton мини-музей <span class="stars"><span class="on">★★★</span><span class="off">☆☆</span></span></div>
+        <div class="tl-desc">Siam area. Маленький, но в конце дают подарочки.</div>
+        <div class="tl-transport">↓ BTS Siam → Sala Daeng (2 остановки, 5 мин)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">13:00 — 14:00</div>
+        <div class="tl-title">Dusit Central Park (сад на крыше, 4-7 этаж) <span class="stars"><span class="on">★★★★</span><span class="off">☆</span></span></div>
+        <div class="tl-desc">Угол Silom и Rama IV. Крупнейший rooftop-сад Таиланда (11 200 м²). Бесплатно, 6:00-22:00. Вид на Lumphini Park.</div>
+        <div class="tl-transport">↓ 5 мин пешком (буквально рядом)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">14:00 — 15:00</div>
+        <div class="tl-title">Lumphini Park <span class="stars"><span class="on">★★★</span><span class="off">☆☆</span></span></div>
+        <div class="tl-desc">Вараны, озеро. ОК, но вы уже видели Benjakitti (Day 3). Можно скипнуть → больше времени на массаж.</div>
+        <div class="tl-transport">↓ 5 мин пешком (район Silom — салонов полно)</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">16:30 — 17:30</div>
+        <div class="tl-title">Тайский массаж #2 <span class="stars"><span class="on">★★★★★</span></span></div>
+        <div class="tl-desc">Найти простой салон. Масло лучше всего. Начать с массажа ног.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-time">19:00+</div>
+        <div class="tl-title">Вечер</div>
+        <div class="alt-box">
+          <div class="alt-title">Выбрать:</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--day1)">A</span> <strong>Drag-шоу @ Stranger</strong> — уникально, «была в восторге» ★★★★☆</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--muted)">B</span> <strong>Soi Cowboy</strong> — «прочувствовать Тай», на любителя ★★☆☆☆</div>
+          <div class="alt-option"><span class="alt-letter" style="background:var(--day4)">C</span> <strong>Sukhumvit street food</strong> + бары в Thong Lo ★★★★☆</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ SKIP ═══════════ -->
+<section id="skip">
+  <div class="section-title"><span class="dot" style="background:#ccc"></span> Что не вошло и почему</div>
+  <div class="skip-grid">
+    <div class="skip-row">
+      <div class="name">Mahanakhon SkyWalk</div>
+      <div class="reason">Tichuca лучше (Lecya)</div>
+      <div class="alt">→ заменить Tichuca</div>
+    </div>
+    <div class="skip-row">
+      <div class="name">Arabica 58F</div>
+      <div class="reason">Кофе ужасный</div>
+      <div class="alt">→ забежать за мороженым</div>
+    </div>
+    <div class="skip-row">
+      <div class="name">BKK Social Club</div>
+      <div class="reason">Дорого, только вид</div>
+      <div class="alt">→ Tichuca / Unculture</div>
+    </div>
+    <div class="skip-row">
+      <div class="name">Каналы (klong tour)</div>
+      <div class="reason">«На последние дни, если нечего делать»</div>
+      <div class="alt">→ если 5+ дней</div>
+    </div>
+    <div class="skip-row">
+      <div class="name">MOCA / Space & Time Cube</div>
+      <div class="reason">Не проверены</div>
+      <div class="alt">→ low priority</div>
+    </div>
+    <div class="skip-row">
+      <div class="name">Khao San Road</div>
+      <div class="reason">Туристический пузырь</div>
+      <div class="alt">→ для дешёвых коктейлей</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TRANSPORT ═══════════ -->
+<section id="transport">
+  <div class="section-title"><span class="dot" style="background:var(--day2)"></span> Транспорт</div>
+  <div class="transport-grid">
+    <div class="transport-card">
+      <div class="icon">🚈</div>
+      <div class="name">BTS Skytrain</div>
+      <div class="info">Siam, Sukhumvit, Silom, Chatuchak<br>฿16-59 · Rabbit card</div>
+    </div>
+    <div class="transport-card">
+      <div class="icon">🚇</div>
+      <div class="name">MRT Subway</div>
+      <div class="info">Chinatown, Chatuchak, Silom<br>฿16-42</div>
+    </div>
+    <div class="transport-card">
+      <div class="icon">⛴</div>
+      <div class="name">Речной бот</div>
+      <div class="info">Old Town, Wat Arun, Iconsiam<br>฿15-40 · пасс на пирсе Iconsiam</div>
+    </div>
+    <div class="transport-card">
+      <div class="icon">🛺</div>
+      <div class="name">Grab (такси)</div>
+      <div class="info">Всегда честная цена<br>฿50-200</div>
+    </div>
+    <div class="transport-card">
+      <div class="icon">🛵</div>
+      <div class="name">Тук-тук</div>
+      <div class="info">Торговаться ДО посадки!<br>฿60-150</div>
+    </div>
+    <div class="transport-card">
+      <div class="icon">💆</div>
+      <div class="name">Массаж (бонус)</div>
+      <div class="info">Масло, начать с ног<br>฿200-500/час</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MAP ═══════════ -->
+<a href="bangkok_map.html" class="map-link">
+  🗺 Интерактивная карта — все точки + маршруты по дням
+</a>
+
+<div class="footer">
+  Bangkok 4-Day Guide · на основе рекомендаций от Lecya & friends · 2026
+</div>
+
+</body>
+</html>
