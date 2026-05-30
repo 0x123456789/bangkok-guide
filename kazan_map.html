@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kazan, Russia - Route Plan</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Roboto", "Noto Sans", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .layout {
+      display: grid;
+      grid-template-areas:
+        "map"
+        "panel";
+      grid-template-rows: minmax(420px, 62vh) minmax(0, 38vh);
+      height: 100vh;
+      gap: 0;
+    }
+    .panel {
+      grid-area: panel;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      overflow: auto;
+      padding: 18px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .day-count-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+    .day-count-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .day-count-select {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .day-count-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 7px 11px;
+      cursor: pointer;
+    }
+    .chip.active {
+      color: #fff;
+      border-color: transparent;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .group-title {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+    .item {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .item:hover {
+      box-shadow: 0 4px 14px rgba(17, 24, 39, 0.08);
+    }
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .item-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    #map {
+      grid-area: map;
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+    }
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-rows: 50vh 50vh;
+      }
+      .panel {
+        border-top: 1px solid var(--line);
+      }
+      #map {
+        min-height: 260px;
+      }
+      .day-count-wrap {
+        flex-wrap: wrap;
+      }
+      .day-count-hint {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="panel">
+      <div class="title">Kazan, Russia: маршруты по дням</div>
+      <div class="day-count-wrap">
+        <span class="day-count-label">Количество дней</span>
+        <select id="dayCount" class="day-count-select"></select>
+        <div id="dayCountHint" class="day-count-hint"></div>
+      </div>
+      <div id="chips" class="chips"></div>
+      <div id="list" class="list"></div>
+    </aside>
+    <main id="map"></main>
+  </div>
+
+  <script>
+    window.__ROUTE_DATA__ = {"city": "Kazan, Russia", "center": [55.7963, 49.1088], "zoom": 12, "stops": [{"day": 1, "label": "Историческое ядро", "order": 1, "name": "Казанский Кремль", "lat": 55.7989, "lon": 49.1064, "rating": 5, "category": "landmark", "time": "09:00-11:00", "notes": "Начни с открытия: меньше очередей."}, {"day": 1, "label": "Историческое ядро", "order": 2, "name": "Мечеть Кул-Шариф", "lat": 55.7983, "lon": 49.1055, "rating": 5, "category": "landmark", "time": "11:05-11:45", "notes": "Соблюдай правила посещения и дресс-код."}, {"day": 1, "label": "Историческое ядро", "order": 3, "name": "Башня Сююмбике", "lat": 55.7991, "lon": 49.106, "rating": 4, "category": "landmark", "time": "11:50-12:20", "notes": "Удобная фототочка внутри кремлевского кластера."}, {"day": 1, "label": "Историческое ядро", "order": 4, "name": "Дворец земледельцев", "lat": 55.8012, "lon": 49.1135, "rating": 4, "category": "landmark", "time": "12:35-13:10", "notes": "Короткая остановка на фото."}, {"day": 1, "label": "Историческое ядро", "order": 5, "name": "Улица Баумана", "lat": 55.7887, "lon": 49.1221, "rating": 4, "category": "walk", "time": "14:30-16:00", "notes": "Пешеходная прогулка и кофе-пауза."}, {"day": 1, "label": "Историческое ядро", "order": 6, "name": "Кремлевская набережная", "lat": 55.803, "lon": 49.1103, "rating": 4, "category": "walk", "time": "18:00-20:00", "notes": "Лучший вечерний слот."}, {"day": 2, "label": "Татарская Казань", "order": 1, "name": "Старо-Татарская слобода", "lat": 55.779, "lon": 49.1197, "rating": 4, "category": "neighborhood", "time": "09:30-11:00", "notes": "Прогулка по историческим кварталам."}, {"day": 2, "label": "Татарская Казань", "order": 2, "name": "Музей чак-чака", "lat": 55.7798, "lon": 49.115, "rating": 4, "category": "museum", "time": "11:10-12:00", "notes": "Камерный формат, лучше заранее бронировать."}, {"day": 2, "label": "Татарская Казань", "order": 3, "name": "Набережная озера Кабан", "lat": 55.7816, "lon": 49.1213, "rating": 4, "category": "park", "time": "14:00-16:00", "notes": "Комфортная длинная прогулка вдоль воды."}, {"day": 2, "label": "Татарская Казань", "order": 4, "name": "Театр Камала", "lat": 55.7824, "lon": 49.1224, "rating": 3, "category": "landmark", "time": "16:10-16:40", "notes": "Короткая остановка в том же кластере."}, {"day": 2, "label": "Татарская Казань", "order": 5, "name": "Вечер в центре", "lat": 55.7903, "lon": 49.119, "rating": 4, "category": "food", "time": "18:30-20:30", "notes": "Ужин в районе центра."}, {"day": 3, "label": "Современные точки и панорамы", "order": 1, "name": "Центр семьи Казан (Чаша)", "lat": 55.8175, "lon": 49.1223, "rating": 4, "category": "viewpoint", "time": "10:00-11:00", "notes": "Панорамы и фотографии."}, {"day": 3, "label": "Современные точки и панорамы", "order": 2, "name": "Экстрим-парк Урам", "lat": 55.8117, "lon": 49.1217, "rating": 4, "category": "activity", "time": "11:15-12:30", "notes": "Современное городское пространство."}, {"day": 3, "label": "Современные точки и панорамы", "order": 3, "name": "ЦСК Смена", "lat": 55.7906, "lon": 49.1015, "rating": 4, "category": "museum", "time": "14:30-16:00", "notes": "Проверь программу выставок и лекций."}, {"day": 3, "label": "Современные точки и панорамы", "order": 4, "name": "Горкинско-Ометьевский лес", "lat": 55.7647, "lon": 49.1904, "rating": 3, "category": "park", "time": "16:30-18:30", "notes": "Опция спокойного зеленого вечера."}, {"day": 0, "label": "Extras / Anytime", "order": 0, "name": "Национальный музей РТ", "lat": 55.7965, "lon": 49.1082, "rating": 4, "category": "museum", "time": "", "notes": "Indoor fallback в центре."}, {"day": 0, "label": "Extras / Anytime", "order": 0, "name": "Парк Черное озеро", "lat": 55.7945, "lon": 49.1172, "rating": 3, "category": "park", "time": "", "notes": "Короткая пауза между центральными точками."}, {"day": 0, "label": "Extras / Anytime", "order": 0, "name": "Храм всех религий", "lat": 55.8274, "lon": 48.996, "rating": 3, "category": "landmark", "time": "", "notes": "Выездная точка, лучше такси туда-обратно."}], "dayLabels": {"0": "Extras / Anytime", "1": "Историческое ядро", "2": "Татарская Казань", "3": "Современные точки и панорамы"}, "dayColors": {"0": "#6b7280", "1": "#ef4444", "2": "#3b82f6", "3": "#22c55e"}};
+  </script>
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+  <script>
+    (function() {
+      const data = window.__ROUTE_DATA__;
+      const chipsEl = document.getElementById("chips");
+      const listEl = document.getElementById("list");
+      const dayCountEl = document.getElementById("dayCount");
+      const dayCountHintEl = document.getElementById("dayCountHint");
+
+      let map;
+      let activeDay = "all";
+      const objects = [];
+      const stopById = new Map();
+      const palette = ["#ef4444", "#3b82f6", "#22c55e", "#a855f7", "#f59e0b", "#14b8a6", "#f97316", "#64748b"];
+      const originalRouteStops = data.stops
+        .filter((stop) => Number(stop.day) > 0)
+        .sort((a, b) => {
+          const dayDiff = Number(a.day) - Number(b.day);
+          if (dayDiff !== 0) return dayDiff;
+          return (Number(a.order) || 999) - (Number(b.order) || 999);
+        })
+        .map((stop, idx) => ({ ...stop, _sourceId: `route-${idx}` }));
+      const extraStops = data.stops
+        .filter((stop) => Number(stop.day) === 0)
+        .map((stop, idx) => ({ ...stop, _sourceId: `extra-${idx}` }));
+      const originalDayNames = {};
+      Object.keys(data.dayLabels).forEach((dayKey) => {
+        if (Number(dayKey) > 0) {
+          originalDayNames[Number(dayKey)] = data.dayLabels[dayKey];
+        }
+      });
+
+      const defaultDayCount = Math.max(1, Object.keys(originalDayNames).length || 1);
+      const maxDayCount = Math.max(defaultDayCount, Math.min(10, originalRouteStops.length || defaultDayCount));
+
+      let dayCount = defaultDayCount;
+      let currentStops = [];
+      let currentDayLabels = {};
+      let dayKeys = [];
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function colorByDay(day) {
+        if (Number(day) === 0) return "#6b7280";
+        return data.dayColors[String(day)] || palette[(Number(day) - 1) % palette.length];
+      }
+
+      function buildDayLabel(dayNumber) {
+        const baseName = originalDayNames[dayNumber];
+        if (dayCount === defaultDayCount && baseName) {
+          return `День ${dayNumber}: ${baseName}`;
+        }
+        return `День ${dayNumber}`;
+      }
+
+      function buildDynamicPlan(targetDayCount) {
+        const labels = {};
+        for (let day = 1; day <= targetDayCount; day += 1) {
+          labels[day] = buildDayLabel(day);
+        }
+        if (extraStops.length) {
+          labels[0] = "Дополнительно";
+        }
+
+        const redistributed = [];
+        const total = originalRouteStops.length;
+        const dayOrders = {};
+        for (let i = 0; i < total; i += 1) {
+          const sourceStop = originalRouteStops[i];
+          const day = Math.min(targetDayCount, Math.floor((i * targetDayCount) / total) + 1);
+          dayOrders[day] = (dayOrders[day] || 0) + 1;
+          redistributed.push({
+            ...sourceStop,
+            day,
+            order: dayOrders[day],
+            label: labels[day],
+          });
+        }
+
+        extraStops.forEach((stop) => {
+          redistributed.push({
+            ...stop,
+            day: 0,
+            order: 0,
+            label: labels[0] || "Дополнительно",
+          });
+        });
+
+        return { labels, stops: redistributed };
+      }
+
+      function updateDayHint() {
+        const routeOnly = currentStops.filter((stop) => Number(stop.day) > 0).length;
+        dayCountHintEl.textContent = `${routeOnly} точек`;
+      }
+
+      function refreshData() {
+        const dynamicPlan = buildDynamicPlan(dayCount);
+        currentStops = dynamicPlan.stops;
+        currentDayLabels = dynamicPlan.labels;
+        dayKeys = Object.keys(currentDayLabels).sort((a, b) => {
+          const dayA = Number(a);
+          const dayB = Number(b);
+          if (dayA === 0) return 1;
+          if (dayB === 0) return -1;
+          return dayA - dayB;
+        });
+        if (activeDay !== "all" && !dayKeys.includes(activeDay)) {
+          activeDay = "all";
+        }
+      }
+
+      function initDayControl() {
+        dayCountEl.innerHTML = "";
+        for (let count = 1; count <= maxDayCount; count += 1) {
+          const option = document.createElement("option");
+          option.value = String(count);
+          option.textContent = `${count}`;
+          dayCountEl.appendChild(option);
+        }
+        dayCountEl.value = String(dayCount);
+        dayCountEl.addEventListener("change", () => {
+          dayCount = Number(dayCountEl.value) || defaultDayCount;
+          activeDay = "all";
+          refreshData();
+          renderChips();
+          renderList();
+          initMapObjects();
+          renderMapObjects();
+          updateDayHint();
+        });
+      }
+
+      function renderChips() {
+        chipsEl.innerHTML = "";
+        const allBtn = document.createElement("button");
+        allBtn.className = "chip" + (activeDay === "all" ? " active" : "");
+        allBtn.textContent = "Все дни";
+        allBtn.style.background = activeDay === "all" ? "#111827" : "#fff";
+        allBtn.onclick = () => setDay("all");
+        chipsEl.appendChild(allBtn);
+
+        dayKeys.forEach((day) => {
+          const btn = document.createElement("button");
+          const color = colorByDay(day);
+          btn.className = "chip" + (activeDay === day ? " active" : "");
+          btn.textContent = currentDayLabels[day];
+          btn.style.background = activeDay === day ? color : "#fff";
+          btn.onclick = () => setDay(day);
+          chipsEl.appendChild(btn);
+        });
+      }
+
+      function renderList() {
+        listEl.innerHTML = "";
+        const groups = {};
+        dayKeys.forEach((day) => (groups[day] = []));
+
+        currentStops.forEach((stop) => {
+          const id = String(stop._sourceId);
+          stopById.set(id, stop);
+          const day = String(stop.day);
+          if (!(day in groups)) groups[day] = [];
+          groups[day].push({ ...stop, _id: id });
+        });
+
+        dayKeys.forEach((day) => {
+          if (activeDay !== "all" && activeDay !== day) return;
+          const items = (groups[day] || []).sort((a, b) => (a.order || 999) - (b.order || 999));
+          if (!items.length) return;
+
+          const title = document.createElement("div");
+          title.className = "group-title";
+          title.textContent = currentDayLabels[day];
+          listEl.appendChild(title);
+
+          items.forEach((item) => {
+            const card = document.createElement("button");
+            card.className = "item";
+            card.style.borderColor = "#e5e7eb";
+            card.innerHTML = `
+              <div class="item-name">${escapeHtml(item.name)}</div>
+              <div class="item-meta">${escapeHtml(item.time || "Гибкое время")}</div>
+            `;
+            card.onclick = () => focusStop(item._id);
+            listEl.appendChild(card);
+          });
+        });
+      }
+
+      function setDay(day) {
+        activeDay = day;
+        renderChips();
+        renderList();
+        renderMapObjects();
+      }
+
+      function buildBalloon(stop) {
+        const time = stop.time ? `<div style="color:#6b7280;font-size:12px;margin-top:3px;">${escapeHtml(stop.time)}</div>` : "";
+        const notes = stop.notes ? `<div style="margin-top:6px;line-height:1.35;">${escapeHtml(stop.notes)}</div>` : "";
+        return `
+          <div style="min-width:220px;max-width:320px;font-family:Arial,sans-serif;">
+            <div style="font-weight:700;font-size:14px;">${escapeHtml(stop.name)}</div>
+            <div style="color:#6b7280;font-size:12px;">${escapeHtml(stop.label || "")}</div>
+            ${time}
+            ${notes}
+          </div>
+        `;
+      }
+
+      function initMapObjects() {
+        objects.length = 0;
+        const byDay = {};
+        dayKeys.forEach((day) => (byDay[day] = []));
+
+        currentStops.forEach((stop) => {
+          const day = String(stop.day);
+          const color = colorByDay(day);
+          const marker = new ymaps.Placemark(
+            [stop.lat, stop.lon],
+            {
+              balloonContent: buildBalloon(stop),
+              hintContent: stop.name,
+            },
+            {
+              preset: "islands#dotIcon",
+              iconColor: color,
+            }
+          );
+          objects.push({ day, type: "marker", id: String(stop._sourceId), obj: marker, stop });
+          if (!byDay[day]) byDay[day] = [];
+          byDay[day].push(stop);
+        });
+
+        dayKeys.forEach((day) => {
+          const routeStops = (byDay[day] || [])
+            .filter((s) => (s.order || 0) > 0)
+            .sort((a, b) => (a.order || 0) - (b.order || 0));
+          if (routeStops.length < 2) return;
+          const route = new ymaps.Polyline(
+            routeStops.map((s) => [s.lat, s.lon]),
+            {
+              hintContent: "Маршрут: " + currentDayLabels[day],
+            },
+            {
+              strokeColor: colorByDay(day),
+              strokeWidth: 4,
+              strokeOpacity: 0.75,
+            }
+          );
+          objects.push({ day, type: "polyline", obj: route });
+        });
+      }
+
+      function renderMapObjects() {
+        if (!map) return;
+        map.geoObjects.removeAll();
+        objects.forEach((entry) => {
+          if (activeDay === "all" || entry.day === activeDay) {
+            map.geoObjects.add(entry.obj);
+          }
+        });
+      }
+
+      function focusStop(id) {
+        const stop = stopById.get(String(id));
+        if (!stop || !map) return;
+        map.setCenter([stop.lat, stop.lon], Math.max(data.zoom, 14), { duration: 250 });
+      }
+
+      ymaps.ready(function() {
+        map = new ymaps.Map("map", {
+          center: data.center,
+          zoom: data.zoom,
+          controls: ["zoomControl", "typeSelector", "fullscreenControl"],
+        });
+
+        initMapObjects();
+        renderMapObjects();
+      });
+
+      initDayControl();
+      refreshData();
+      setDay("all");
+      updateDayHint();
+    })();
+  </script>
+</body>
+</html>
