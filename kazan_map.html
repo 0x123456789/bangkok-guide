@@ -31,17 +31,17 @@
       grid-area: panel;
       background: var(--panel);
       border-right: 1px solid var(--line);
-      overflow: auto;
-      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 18px 18px 0;
     }
     .panel-controls {
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      flex: 0 0 auto;
       background: var(--panel);
       padding-bottom: 10px;
       border-bottom: 1px solid var(--line);
-      margin-bottom: 12px;
+      margin-bottom: 0;
     }
     .title {
       font-size: 20px;
@@ -99,14 +99,17 @@
     .list {
       display: flex;
       flex-direction: column;
+      flex: 1 1 auto;
+      overflow: auto;
       gap: 10px;
+      padding: 10px 0 18px;
     }
     .group-title {
       font-size: 12px;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-top: 10px;
+      margin-top: 0;
       margin-bottom: 4px;
     }
     .item {
@@ -145,6 +148,7 @@
       .panel {
         border-right: 0;
         border-top: 1px solid var(--line);
+        padding: 14px 14px 0;
       }
       #map {
         min-height: 260px;
