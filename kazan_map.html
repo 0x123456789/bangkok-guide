@@ -34,6 +34,15 @@
       overflow: auto;
       padding: 18px;
     }
+    .panel-controls {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--panel);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
     .title {
       font-size: 20px;
       font-weight: 700;
@@ -73,7 +82,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 0;
     }
     .chip {
       border: 1px solid var(--line);
@@ -152,13 +161,15 @@
 <body>
   <div class="layout">
     <aside class="panel">
-      <div class="title">Kazan, Russia: маршруты по дням</div>
-      <div class="day-count-wrap">
-        <span class="day-count-label">Количество дней</span>
-        <select id="dayCount" class="day-count-select"></select>
-        <div id="dayCountHint" class="day-count-hint"></div>
+      <div class="panel-controls">
+        <div class="title">Kazan, Russia: маршруты по дням</div>
+        <div class="day-count-wrap">
+          <span class="day-count-label">Количество дней</span>
+          <select id="dayCount" class="day-count-select"></select>
+          <div id="dayCountHint" class="day-count-hint"></div>
+        </div>
+        <div id="chips" class="chips"></div>
       </div>
-      <div id="chips" class="chips"></div>
       <div id="list" class="list"></div>
     </aside>
     <main id="map"></main>
