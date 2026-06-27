@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vyborg, Russia - Route Plan</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Roboto", "Noto Sans", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .layout {
+      display: grid;
+      grid-template-areas: "panel map";
+      grid-template-columns: minmax(320px, 38vw) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      height: 100vh;
+      gap: 0;
+    }
+    .panel {
+      grid-area: panel;
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 18px 18px 0;
+    }
+    .panel-controls {
+      flex: 0 0 auto;
+      background: var(--panel);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 0;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .day-count-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+    .day-count-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .day-count-select {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .day-count-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 0;
+    }
+    .days-toggle {
+      display: none;
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .days-toggle-icon {
+      color: var(--muted);
+      font-size: 11px;
+      transition: transform 0.18s ease;
+      transform-origin: center;
+    }
+    .panel-controls.mobile-collapsed .days-toggle-icon {
+      transform: rotate(-90deg);
+    }
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 7px 11px;
+      cursor: pointer;
+    }
+    .chip.active {
+      color: #fff;
+      border-color: transparent;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      overflow: auto;
+      gap: 10px;
+      padding: 10px 0 18px;
+    }
+    .group-title {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
+    .item {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      position: relative;
+    }
+    .item:hover {
+      box-shadow: 0 4px 14px rgba(17, 24, 39, 0.08);
+    }
+    .item-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 0;
+      padding-right: 26px;
+    }
+    .item-hours-chip {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      max-width: 96px;
+      border: 1px solid #dbe3ee;
+      background: #f8fafc;
+      border-radius: 999px;
+      color: #64748b;
+      padding: 2px 6px 2px 5px;
+    }
+    .item-hours-icon {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 auto;
+    }
+    .item-hours-text {
+      font-size: 10px;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #475569;
+      font-variant-numeric: tabular-nums;
+    }
+    .item-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    #map {
+      grid-area: map;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-areas:
+          "map"
+          "panel";
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 30dvh) minmax(0, 70dvh);
+      }
+      .panel {
+        border-right: 0;
+        border-top: 1px solid var(--line);
+        padding: 14px 14px 0;
+      }
+      #map {
+        min-height: 0;
+        max-height: 30dvh;
+      }
+      .day-count-wrap {
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .day-count-hint {
+        margin-left: 0;
+      }
+      .days-toggle {
+        display: inline-flex;
+      }
+      .panel-controls.mobile-collapsed .chips {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="panel">
+      <div class="panel-controls">
+        <div class="title">Vyborg, Russia: маршруты по дням</div>
+        <div class="day-count-wrap">
+          <span class="day-count-label">Количество дней</span>
+          <select id="dayCount" class="day-count-select"></select>
+          <div id="dayCountHint" class="day-count-hint"></div>
+        </div>
+        <button id="daysToggle" class="days-toggle" type="button" aria-expanded="true" aria-controls="chips">
+          <span>Дни маршрута</span>
+          <span class="days-toggle-icon" aria-hidden="true">▼</span>
+        </button>
+        <div id="chips" class="chips"></div>
+      </div>
+      <div id="list" class="list"></div>
+    </aside>
+    <main id="map"></main>
+  </div>
+
+  <script>
+    window.__ROUTE_BUNDLE__ = {"city": "Vyborg, Russia", "center": [60.7139, 28.7478], "zoom": 14, "defaultDayCount": 1, "maxDayCount": 9, "variants": {"1": {"dayLabels": {"1": "День 1: Выборг за один день"}, "dayKeys": ["1"], "stops": [{"day": 1, "label": "День 1: Выборг за один день", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 2, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:30-10:50", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 3, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "11:00-11:30", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 4, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "11:40-12:10", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 5, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "12:20-12:50", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 6, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "13:00-13:25", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 7, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "13:35-13:55", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 8, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "14:05-15:15", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}, {"day": 1, "label": "День 1: Выборг за один день", "order": 9, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "15:25-16:05", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 8}, "2": {"dayLabels": {"1": "День 1", "2": "День 2"}, "dayKeys": ["1", "2"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:30-10:50", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 3, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "11:00-11:30", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 4, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "11:40-12:10", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 5, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "12:20-12:50", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "10:00-10:25", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 2, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:35-10:55", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 3, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "11:05-12:15", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 4, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "12:25-13:05", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "3": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3"}, "dayKeys": ["1", "2", "3"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:30-11:00", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 3, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "11:10-11:40", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:00-10:20", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 2, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:30-11:00", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 3, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "11:10-11:35", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:00-10:20", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 2, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:30-11:40", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 3, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "11:50-12:30", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "4": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3", "4": "День 4"}, "dayKeys": ["1", "2", "3", "4"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:30-10:50", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:00-10:30", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 2, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:40-11:10", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 3, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "11:20-11:45", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "10:00-10:40", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 2, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "10:50-11:20", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 1, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:00-11:10", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 2, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "11:20-11:40", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "5": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3", "4": "День 4", "5": "День 5"}, "dayKeys": ["1", "2", "3", "4", "5"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "10:30-10:55", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:00-10:20", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 2, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:30-10:50", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:00-10:30", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 2, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "10:40-11:10", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 1, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:00-10:30", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 1, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "10:00-10:40", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 2, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:50-12:00", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "6": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3", "4": "День 4", "5": "День 5", "6": "День 6"}, "dayKeys": ["1", "2", "3", "4", "5", "6"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "10:30-10:55", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:00-10:20", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 2, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:30-10:50", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:00-10:30", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 1, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:00-10:30", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 1, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "10:00-10:40", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 2, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "10:50-11:20", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 6, "label": "День 6", "order": 1, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:00-11:10", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "7": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3", "4": "День 4", "5": "День 5", "6": "День 6", "7": "День 7"}, "dayKeys": ["1", "2", "3", "4", "5", "6", "7"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:30-10:50", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:00-10:20", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:00-10:30", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 1, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:00-10:30", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 1, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "10:00-10:25", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 6, "label": "День 6", "order": 1, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "10:00-10:40", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}, {"day": 6, "label": "День 6", "order": 2, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "10:50-11:20", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 7, "label": "День 7", "order": 1, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:00-11:10", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "8": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3", "4": "День 4", "5": "День 5", "6": "День 6", "7": "День 7", "8": "День 8"}, "dayKeys": ["1", "2", "3", "4", "5", "6", "7", "8"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 1, "label": "День 1", "order": 2, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:30-10:50", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:00-10:20", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "10:00-10:30", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 1, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:00-10:30", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 1, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:00-10:30", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 6, "label": "День 6", "order": 1, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "10:00-10:25", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 7, "label": "День 7", "order": 1, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:00-11:10", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}, {"day": 8, "label": "День 8", "order": 1, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "10:00-10:40", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}, "9": {"dayLabels": {"1": "День 1", "2": "День 2", "3": "День 3", "4": "День 4", "5": "День 5", "6": "День 6", "7": "День 7", "8": "День 8", "9": "День 9"}, "dayKeys": ["1", "2", "3", "4", "5", "6", "7", "8", "9"], "stops": [{"day": 1, "label": "День 1", "order": 1, "name": "Железнодорожный вокзал Выборг", "lat": 60.715767, "lon": 28.751891, "rating": 5, "category": "transport", "time": "10:00-10:20", "openingHours": "???", "notes": "Старт маршрута.", "_sourceId": "route-0", "_sourceDay": 1}, {"day": 2, "label": "День 2", "order": 1, "name": "Красная площадь", "lat": 60.710381, "lon": 28.749521, "rating": 4, "category": "landmark", "time": "10:00-10:20", "openingHours": "24/7", "notes": "Центральная площадь Выборга по пути от вокзала в Старый город.", "_sourceId": "route-1", "_sourceDay": 1}, {"day": 3, "label": "День 3", "order": 1, "name": "Лавка стеклодува", "lat": 60.712229, "lon": 28.736265, "rating": 4, "category": "activity", "time": "10:00-10:30", "openingHours": "???", "notes": "Мастерская и магазин авторских стеклянных изделий.", "_sourceId": "route-8", "_sourceDay": 1}, {"day": 4, "label": "День 4", "order": 1, "name": "Лавка Рыжей Лапки", "lat": 60.712454, "lon": 28.736064, "rating": 4, "category": "market", "time": "10:00-10:30", "openingHours": "???", "notes": "Сувениры и локальная атмосфера.", "_sourceId": "route-7", "_sourceDay": 1}, {"day": 5, "label": "День 5", "order": 1, "name": "Усадьба Бюргера", "lat": 60.713647, "lon": 28.734231, "rating": 4, "category": "landmark", "time": "10:00-10:30", "openingHours": "???", "notes": "Средневековый комплекс на Прогонной улице.", "_sourceId": "route-6", "_sourceDay": 1}, {"day": 6, "label": "День 6", "order": 1, "name": "Немецкая улица / Прогонная улица", "lat": 60.71393, "lon": 28.73362, "rating": 4, "category": "walk", "time": "10:00-10:25", "openingHours": "24/7", "notes": "Историческая Немецкая улица; современное название — Прогонная улица.", "_sourceId": "route-2", "_sourceDay": 1}, {"day": 7, "label": "День 7", "order": 1, "name": "Лавочка вкусностей Wiborg", "lat": 60.713492, "lon": 28.731462, "rating": 4, "category": "food", "time": "10:00-10:20", "openingHours": "???", "notes": "Крендели и гастрономические сувениры рядом с таверной.", "_sourceId": "route-5", "_sourceDay": 1}, {"day": 8, "label": "День 8", "order": 1, "name": "Средневековая таверна", "lat": 60.713462, "lon": 28.731402, "rating": 5, "category": "food", "time": "10:00-11:10", "openingHours": "???", "notes": "Обязательная остановка на обед; лучше проверить бронь и очередь.", "_sourceId": "route-4", "_sourceDay": 1}, {"day": 9, "label": "День 9", "order": 1, "name": "Антикварный салон и кофейня Торгильс", "lat": 60.713832, "lon": 28.731105, "rating": 4, "category": "activity", "time": "10:00-10:40", "openingHours": "???", "notes": "Антикварный салон с кофе-паузой.", "_sourceId": "route-3", "_sourceDay": 1}], "routeStopCount": 9, "scheduleAdjusted": 9}}, "dayColors": {"0": "#6b7280", "1": "#ef4444", "2": "#3b82f6", "3": "#22c55e", "4": "#a855f7", "5": "#f59e0b", "6": "#14b8a6", "7": "#f97316", "8": "#64748b", "9": "#ef4444"}, "generatedAt": 1782589102};
+  </script>
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+  <script>
+    (function() {
+      const bundle = window.__ROUTE_BUNDLE__;
+      const chipsEl = document.getElementById("chips");
+      const listEl = document.getElementById("list");
+      const dayCountEl = document.getElementById("dayCount");
+      const dayCountHintEl = document.getElementById("dayCountHint");
+      const panelControlsEl = document.querySelector(".panel-controls");
+      const daysToggleEl = document.getElementById("daysToggle");
+      const mobileMedia = window.matchMedia("(max-width: 960px)");
+
+      let map;
+      let activeDay = "all";
+      let dayCount = bundle.defaultDayCount;
+      let currentVariant = bundle.variants[String(dayCount)];
+      const objects = [];
+      const stopById = new Map();
+      const palette = ["#ef4444", "#3b82f6", "#22c55e", "#a855f7", "#f59e0b", "#14b8a6", "#f97316", "#64748b"];
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function colorByDay(day) {
+        if (Number(day) === 0) return "#6b7280";
+        return bundle.dayColors[String(day)] || palette[(Number(day) - 1) % palette.length];
+      }
+
+      function setVariant(nextDayCount) {
+        const fallback = bundle.variants[String(bundle.defaultDayCount)];
+        currentVariant = bundle.variants[String(nextDayCount)] || fallback;
+        if (activeDay !== "all" && !currentVariant.dayKeys.includes(activeDay)) {
+          activeDay = "all";
+        }
+      }
+
+      function updateDayHint() {
+        dayCountHintEl.textContent = `${currentVariant.routeStopCount} точек`;
+      }
+
+      function updateDaysToggleState() {
+        if (!panelControlsEl || !daysToggleEl) return;
+        const isCollapsed = panelControlsEl.classList.contains("mobile-collapsed");
+        daysToggleEl.setAttribute("aria-expanded", String(!isCollapsed));
+        daysToggleEl.setAttribute(
+          "aria-label",
+          isCollapsed ? "Показать дни маршрута" : "Скрыть дни маршрута"
+        );
+      }
+
+      function syncMobileDaysMenu() {
+        if (!panelControlsEl || !daysToggleEl) return;
+        if (mobileMedia.matches) {
+          daysToggleEl.hidden = false;
+          if (!panelControlsEl.dataset.mobileCollapseInit) {
+            panelControlsEl.classList.add("mobile-collapsed");
+            panelControlsEl.dataset.mobileCollapseInit = "1";
+          }
+        } else {
+          daysToggleEl.hidden = true;
+          panelControlsEl.classList.remove("mobile-collapsed");
+        }
+        updateDaysToggleState();
+      }
+
+      function initMobileDaysMenu() {
+        if (!panelControlsEl || !daysToggleEl) return;
+        daysToggleEl.addEventListener("click", () => {
+          panelControlsEl.classList.toggle("mobile-collapsed");
+          updateDaysToggleState();
+        });
+        if (typeof mobileMedia.addEventListener === "function") {
+          mobileMedia.addEventListener("change", syncMobileDaysMenu);
+        } else if (typeof mobileMedia.addListener === "function") {
+          mobileMedia.addListener(syncMobileDaysMenu);
+        }
+        syncMobileDaysMenu();
+      }
+
+      function initDayControl() {
+        dayCountEl.innerHTML = "";
+        for (let count = 1; count <= bundle.maxDayCount; count += 1) {
+          const option = document.createElement("option");
+          option.value = String(count);
+          option.textContent = `${count}`;
+          dayCountEl.appendChild(option);
+        }
+        dayCountEl.value = String(dayCount);
+        dayCountEl.addEventListener("change", () => {
+          dayCount = Number(dayCountEl.value) || bundle.defaultDayCount;
+          activeDay = "all";
+          setVariant(dayCount);
+          renderChips();
+          renderList();
+          initMapObjects();
+          renderMapObjects();
+          updateDayHint();
+        });
+      }
+
+      function renderChips() {
+        chipsEl.innerHTML = "";
+        const allBtn = document.createElement("button");
+        allBtn.className = "chip" + (activeDay === "all" ? " active" : "");
+        allBtn.textContent = "Все дни";
+        allBtn.style.background = activeDay === "all" ? "#111827" : "#fff";
+        allBtn.onclick = () => setDay("all");
+        chipsEl.appendChild(allBtn);
+
+        currentVariant.dayKeys.forEach((day) => {
+          const btn = document.createElement("button");
+          const color = colorByDay(day);
+          btn.className = "chip" + (activeDay === day ? " active" : "");
+          btn.textContent = currentVariant.dayLabels[day];
+          btn.style.background = activeDay === day ? color : "#fff";
+          btn.onclick = () => setDay(day);
+          chipsEl.appendChild(btn);
+        });
+      }
+
+      function buildMetaLine(stop) {
+        const parts = [];
+        if (stop.time) {
+          parts.push(escapeHtml(stop.time));
+        } else {
+          parts.push("Гибкое время");
+        }
+        return parts.join(" • ");
+      }
+
+      function compactHoursLabel(openingHours) {
+        const raw = String(openingHours || "").trim();
+        if (!raw) return "";
+        if (/24\s*\/\s*7|круглосуточ/i.test(raw)) return "24/7";
+        const match = raw.match(/(\d{1,2}:\d{2}\s*[-–—]\s*\d{1,2}:\d{2})/);
+        if (match) {
+          return match[1].replace(/[–—]/g, "-").replace(/\s*-\s*/g, "-");
+        }
+        return raw.length > 12 ? `${raw.slice(0, 11)}…` : raw;
+      }
+
+      function buildHoursBadge(stop) {
+        if (!stop.openingHours) return "";
+        const hours = escapeHtml(stop.openingHours);
+        const compactHours = compactHoursLabel(stop.openingHours);
+        if (!compactHours) return "";
+        return `
+          <span class="item-hours-chip" title="Часы работы: ${hours}" aria-label="Часы работы: ${hours}">
+            <svg class="item-hours-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" stroke-width="1.5"></circle>
+              <path d="M8 4.8V8L10.4 9.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+            <span class="item-hours-text">${escapeHtml(compactHours)}</span>
+          </span>
+        `;
+      }
+
+      function renderList() {
+        listEl.innerHTML = "";
+        stopById.clear();
+        const groups = {};
+        currentVariant.dayKeys.forEach((day) => (groups[day] = []));
+
+        currentVariant.stops.forEach((stop) => {
+          const id = String(stop._sourceId);
+          stopById.set(id, stop);
+          const day = String(stop.day);
+          if (!(day in groups)) groups[day] = [];
+          groups[day].push({ ...stop, _id: id });
+        });
+
+        currentVariant.dayKeys.forEach((day) => {
+          if (activeDay !== "all" && activeDay !== day) return;
+          const items = (groups[day] || []).sort((a, b) => (a.order || 999) - (b.order || 999));
+          if (!items.length) return;
+
+          const title = document.createElement("div");
+          title.className = "group-title";
+          title.textContent = currentVariant.dayLabels[day];
+          listEl.appendChild(title);
+
+          items.forEach((item) => {
+            const card = document.createElement("button");
+            card.className = "item";
+            card.innerHTML = `
+              <div class="item-header">
+                <div class="item-name">${escapeHtml(item.name)}</div>
+                ${buildHoursBadge(item)}
+              </div>
+              <div class="item-meta">${buildMetaLine(item)}</div>
+            `;
+            card.onclick = () => focusStop(item._id);
+            listEl.appendChild(card);
+          });
+        });
+      }
+
+      function setDay(day) {
+        activeDay = day;
+        renderChips();
+        renderList();
+        renderMapObjects();
+      }
+
+      function buildBalloon(stop) {
+        const time = stop.time ? `<div style="color:#6b7280;font-size:12px;margin-top:3px;">${escapeHtml(stop.time)}</div>` : "";
+        const openingHours = stop.openingHours
+          ? `<div style="color:#6b7280;font-size:12px;margin-top:3px;">часы работы: ${escapeHtml(stop.openingHours)}</div>`
+          : "";
+        const notes = stop.notes ? `<div style="margin-top:6px;line-height:1.35;">${escapeHtml(stop.notes)}</div>` : "";
+        return `
+          <div style="min-width:220px;max-width:320px;font-family:Arial,sans-serif;">
+            <div style="font-weight:700;font-size:14px;">${escapeHtml(stop.name)}</div>
+            <div style="color:#6b7280;font-size:12px;">${escapeHtml(stop.label || "")}</div>
+            ${time}
+            ${openingHours}
+            ${notes}
+          </div>
+        `;
+      }
+
+      function initMapObjects() {
+        objects.length = 0;
+        const byDay = {};
+        currentVariant.dayKeys.forEach((day) => (byDay[day] = []));
+
+        currentVariant.stops.forEach((stop) => {
+          const day = String(stop.day);
+          const color = colorByDay(day);
+          const marker = new ymaps.Placemark(
+            [stop.lat, stop.lon],
+            {
+              balloonContent: buildBalloon(stop),
+              hintContent: stop.name,
+            },
+            {
+              preset: "islands#dotIcon",
+              iconColor: color,
+            }
+          );
+          objects.push({ day, type: "marker", id: String(stop._sourceId), obj: marker });
+          if (!byDay[day]) byDay[day] = [];
+          byDay[day].push(stop);
+        });
+
+        currentVariant.dayKeys.forEach((day) => {
+          const routeStops = (byDay[day] || [])
+            .filter((stop) => (stop.order || 0) > 0)
+            .sort((a, b) => (a.order || 0) - (b.order || 0));
+          if (routeStops.length < 2) return;
+          const route = new ymaps.Polyline(
+            routeStops.map((stop) => [stop.lat, stop.lon]),
+            {
+              hintContent: "Маршрут: " + currentVariant.dayLabels[day],
+            },
+            {
+              strokeColor: colorByDay(day),
+              strokeWidth: 4,
+              strokeOpacity: 0.75,
+            }
+          );
+          objects.push({ day, type: "polyline", obj: route });
+        });
+      }
+
+      function renderMapObjects() {
+        if (!map) return;
+        map.geoObjects.removeAll();
+        objects.forEach((entry) => {
+          if (activeDay === "all" || entry.day === activeDay) {
+            map.geoObjects.add(entry.obj);
+          }
+        });
+      }
+
+      function focusStop(id) {
+        const stop = stopById.get(String(id));
+        if (!stop || !map) return;
+        map.setCenter([stop.lat, stop.lon], Math.max(bundle.zoom, 14), { duration: 250 });
+      }
+
+      ymaps.ready(function() {
+        map = new ymaps.Map("map", {
+          center: bundle.center,
+          zoom: bundle.zoom,
+          controls: ["zoomControl", "typeSelector", "fullscreenControl"],
+        });
+        initMapObjects();
+        renderMapObjects();
+      });
+
+      initDayControl();
+      initMobileDaysMenu();
+      setVariant(dayCount);
+      setDay("all");
+      updateDayHint();
+    })();
+  </script>
+</body>
+</html>
